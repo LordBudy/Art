@@ -1,4 +1,4 @@
-package com.example.artphotoframe.ui.theme
+package com.example.artphotoframe.core.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
