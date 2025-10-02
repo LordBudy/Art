@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.compose.material3:material3:1.1.0")
 
     implementation("io.insert-koin:koin-android:4.1.1")
 
