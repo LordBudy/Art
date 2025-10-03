@@ -4,7 +4,7 @@ import java.net.URL
 
 data class Picture(
     val id: Int,
-    val title: String?,
+    val title: String,
     val imageURL: String,
-    val body: String?
+    val body: String
 )

@@ -31,8 +31,8 @@ fun FullPicture(
         verticalAlignment = Alignment.Top,
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            . fillMaxSize()
-            .fillMaxWidth()
+            //. fillMaxSize()
+            //.fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.background
             )
