@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
@@ -26,7 +28,8 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
 fun SearchScreen() {
-    val textState = remember { mutableStateOf("Введите название") }
+    // Вот это лучше внутри FastSearch сделать
+    // val textState = remember { mutableStateOf("Введите название") }
     val pictures = remember { mutableStateListOf<Picture>() } // Список для хранения найденных изображений
     // Добавляем тестовые данные для превью
     LaunchedEffect(Unit) {
@@ -68,16 +71,19 @@ fun SearchScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.background)
+                .systemBarsPadding()
         ) {
 
             // Панель поиска
             FastSearch(
-                text = textState.value,
+                text = "",
                 onValueChange = { newText ->
-                    textState.value = newText
                     // добавить логику поиска по введенному тексту fetchPictures(newText)
                 },
-                image = R.drawable.search
+                onSearchClick = { query ->
+                    //
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
             )
 
             // Отображение результатов поиска

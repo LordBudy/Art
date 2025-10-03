@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    // надо бы привести к одному виду
     implementation("androidx.compose.material3:material3:1.1.0")
 
     implementation("io.insert-koin:koin-android:4.1.1")
@@ -63,6 +64,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

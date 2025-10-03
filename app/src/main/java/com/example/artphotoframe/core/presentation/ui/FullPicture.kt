@@ -3,10 +3,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -59,7 +57,8 @@ fun FullPicture(
 
 @PreviewLightDark
 @Composable
-fun Prev() {
+// давай всегда одинаково называть превью функции. Название UI компонента + Preview
+fun FullPicturePreview() {
     val pic = Picture(
         id = 1,
         title = "Die Malkunst",
@@ -77,7 +76,7 @@ fun Prev() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.onSurface)
+                .background(color = MaterialTheme.colorScheme.surface)
         ) {
             FullPicture(
                 picture = pic
