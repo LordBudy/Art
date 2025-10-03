@@ -25,34 +25,22 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 fun FullPicture(
     picture: Picture
 ) {
-    Row(
-        verticalAlignment = Alignment.Top,
+    AsyncImage(
+        model = picture.imageURL,
+        contentDescription = "Picture image",
+        contentScale = ContentScale.FillHeight,// Сохраняем пропорции
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
-            . fillMaxSize()
             .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.background
-            )
-    ) {
-
-        AsyncImage(
-            model = picture.imageURL,
-            contentDescription = "Picture image",
-            contentScale = ContentScale.FillHeight,// Сохраняем пропорции
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16f / 9f)// Соотношение 16:9 или .aspectRatio(1f) // Соотношение сторон 1:1
-                .clip(RoundedCornerShape(10.dp))
-                .border(
-                    width = 1.5.dp,
-                    color = MaterialTheme.colorScheme.outline,
-                    shape = RoundedCornerShape(10.dp)
-                ),
-            placeholder = painterResource(id = R.drawable.media),
-            error = painterResource(id = R.drawable.media)
-        )
-    }
+            .aspectRatio(16f / 9f)// Соотношение 16:9 или .aspectRatio(1f) // Соотношение сторон 1:1
+            .clip(RoundedCornerShape(10.dp))
+            .border(
+                width = 1.5.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(10.dp)
+            ),
+        placeholder = painterResource(id = R.drawable.media),
+        error = painterResource(id = R.drawable.media)
+    )
 }
 
 @PreviewLightDark
