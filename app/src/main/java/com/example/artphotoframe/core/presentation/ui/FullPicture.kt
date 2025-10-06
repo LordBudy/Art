@@ -27,16 +27,6 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 fun FullPicture(
     picture: Picture
 ) {
-    Row(
-        verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
-            //. fillMaxSize()
-            //.fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.background
-            )
-    ) {
 
         AsyncImage(
             model = picture.imageURL,
@@ -55,7 +45,7 @@ fun FullPicture(
             error = painterResource(id = R.drawable.media)
         )
     }
-}
+
 
 @PreviewLightDark
 @Composable
