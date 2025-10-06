@@ -49,7 +49,7 @@ fun FullPicture(
 
 @PreviewLightDark
 @Composable
-fun Prev() {
+fun PreviewFullPicture() {
     val pic = Picture(
         id = 1,
         title = "Die Malkunst",

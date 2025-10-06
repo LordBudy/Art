@@ -59,7 +59,7 @@ fun FullPictureInfo(
 }
 @PreviewLightDark
 @Composable
-fun PrevPicScreen() {
+fun PreviewFullPictureInfo() {
     val pic = Picture(
         id = 1,
         title = "Die Malkunst",
