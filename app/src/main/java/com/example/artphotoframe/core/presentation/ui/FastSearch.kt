@@ -15,8 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -32,7 +34,7 @@ fun FastSearch(
     onSearchClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var textState = remember { mutableStateOf(text) }
+    var textState by remember { mutableStateOf(text) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -43,10 +45,8 @@ fun FastSearch(
     ) {
 
         OutlinedTextField(
-            value = textState.value,
-            onValueChange = { newText ->
-                textState.value = newText
-            },
+            value = textState,
+            onValueChange = { textState = it },
             maxLines = 1,
             placeholder = { Text(text = "Введите название") },
             modifier = Modifier
@@ -55,7 +55,7 @@ fun FastSearch(
                 .padding(horizontal = 8.dp)
         )
         IconButton(
-            onClick = { onSearchClick.invoke(textState.value) }
+            onClick = { onSearchClick.invoke(textState) }
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
