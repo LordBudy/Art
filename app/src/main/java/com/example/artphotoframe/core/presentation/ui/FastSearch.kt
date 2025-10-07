@@ -35,10 +35,9 @@ fun FastSearch(
     modifier: Modifier = Modifier
 ) {
     var textState by remember { mutableStateOf(text) }
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.background
@@ -49,18 +48,21 @@ fun FastSearch(
             value = textState,
             onValueChange = { textState = it },
             maxLines = 1,
-            placeholder = { Text("Введите название") },
+            placeholder = { Text(text = "Введите название") },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(horizontal = 8.dp)
         )
-        IconButton(onClick = { onSearchClick.invoke(textState) }) {
+        IconButton(
+            onClick = { onSearchClick.invoke(textState) }
+        ) {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Поиск",
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.outlineVariant
+
             )
         }
     }
@@ -68,9 +70,9 @@ fun FastSearch(
 
 @PreviewLightDark
 @Composable
-// давай всегда одинаково называть превью функции. Название UI компонента + Preview
 fun FastSearchPreview() {
     val textState = remember { mutableStateOf("Введите название") }
+
     ArtPhotoFrameTheme {
         Box(
             modifier = Modifier
