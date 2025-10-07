@@ -59,7 +59,13 @@ dependencies {
     // Navigation
     implementation(libs.navigation.compose)
 
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
     // Koin
+
+
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
 
@@ -71,8 +77,5 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.material.icons.extended)
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
 }

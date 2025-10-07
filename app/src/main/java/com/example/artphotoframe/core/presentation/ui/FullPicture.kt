@@ -24,12 +24,10 @@ import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
-fun FullPicture(
-    picture: Picture
-) {
-
+fun FullPicture(picture: Picture) {
+    val imageModel = picture.imageURL.firstOrNull() ?: painterResource(id = R.drawable.media)
         AsyncImage(
-            model = picture.imageURL,
+            model = imageModel,
             contentDescription = "Picture image",
             contentScale = ContentScale.FillHeight,// Сохраняем пропорции
             modifier = Modifier
@@ -47,31 +45,24 @@ fun FullPicture(
     }
 
 
-@PreviewLightDark
-@Composable
-fun PreviewFullPicture() {
-    val pic = Picture(
-        id = 1,
-        title = "Die Malkunst",
-        imageURL = "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE",
-        body = "Daten nach Texteingabe migriert, Beschriftung: Signatur: Bez. auf " +
-                "dem unteren Einfassungsstreifen der Landkarte: I Ver-Meer, Beschriftung:" +
-                " Beschriftung: Bez. auf dem oberen Einfassungstreifen der Landkarte: NOVA XVII " +
-                "PROV[IN]CIARUM [GERMAINIAE INF]ERI[O]RIS DESCRIPTIO / ET ACCURATA EARUNDEM " +
-                "... DE NO[VO] EM[EN]D[ATA] ... REC[TISS]IME EDIT[A P]ER NICOLAUM PISCATOREM, " +
-                "Label: inscription: Bez. on the top strip of the map: NOVA XVII PROV [IN] CIARUM " +
-                "[GERMAINIAE INF] ERI [O] RIS DESCRIPTIO/ET ACCURATA EARUNDEM... DE NO [VO] EM " +
-                "[EN] D [ATA]... REC [TISS] IME EDIT [A P] ER NICOLAUM PISCATOREM"
-    )
-    ArtPhotoFrameTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.onSurface)
-        ) {
-            FullPicture(
-                picture = pic
-            )
-        }
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun PreviewFullPicture() {
+//    val pic = Picture(
+//        id = "1",
+//        title = "Die Malkunst",
+//        imageURL = "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE",
+//        description = "Daten nach Texteingabe migriert, Beschriftung:"
+//    )
+//    ArtPhotoFrameTheme {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = MaterialTheme.colorScheme.onSurface)
+//        ) {
+//            FullPicture(
+//                picture = pic
+//            )
+//        }
+//    }
+//}

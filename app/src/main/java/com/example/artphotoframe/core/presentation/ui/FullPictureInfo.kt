@@ -3,11 +3,8 @@ package com.example.artphotoframe.core.presentation.ui
 import FullPicture
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +29,7 @@ fun FullPictureInfo(
         ) {
             // Заголовок
             Text(
-                text = picture.title,
+                text = picture.title ?: "Нет заголовка",
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -45,7 +42,8 @@ fun FullPictureInfo(
 
             // Описание
             Text(
-                text = picture.body,
+                                     // Обработка null
+                text = picture.description ?: "Нет описания",
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -61,17 +59,11 @@ fun FullPictureInfo(
 @Composable
 fun PreviewFullPictureInfo() {
     val pic = Picture(
-        id = 1,
+        id = "1",
         title = "Die Malkunst",
-        imageURL = "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE",
-        body = "Daten nach Texteingabe migriert, Beschriftung: Signatur: Bez. auf " +
-                "dem unteren Einfassungsstreifen der Landkarte: I Ver-Meer, Beschriftung:" +
-                " Beschriftung: Bez. auf dem oberen Einfassungstreifen der Landkarte: NOVA XVII " +
-                "PROV[IN]CIARUM [GERMAINIAE INF]ERI[O]RIS DESCRIPTIO / ET ACCURATA EARUNDEM " +
-                "... DE NO[VO] EM[EN]D[ATA] ... REC[TISS]IME EDIT[A P]ER NICOLAUM PISCATOREM, " +
-                "Label: inscription: Bez. on the top strip of the map: NOVA XVII PROV [IN] CIARUM " +
-                "[GERMAINIAE INF] ERI [O] RIS DESCRIPTIO/ET ACCURATA EARUNDEM... DE NO [VO] EM " +
-                "[EN] D [ATA]... REC [TISS] IME EDIT [A P] ER NICOLAUM PISCATOREM"
+        imageURL = listOf(
+            "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE"),
+        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
     )
     ArtPhotoFrameTheme {
         FullPictureInfo(
