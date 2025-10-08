@@ -1,5 +1,6 @@
 package com.example.artphotoframe.core.data
 
+import android.util.Log
 import com.example.artphotoframe.core.data.models.EuropeanaSearchResponse
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.domain.search.SearchRepository
@@ -8,6 +9,7 @@ import com.example.artphotoframe.core.domain.search.SearchRepository
 class SearchPictureFullRepositoryImpl(private val apiService: ApiService): SearchRepository {
     override suspend fun getSearchPictures(query: String): List<Picture> {
         val response: EuropeanaSearchResponse = apiService.searchPictures(query)
+        Log.d("SearchPictureFullRepositoryImpl", "response $response")
         return response.items?.map {
             Picture.fromEuropeanaItem(it) } ?: emptyList()
     }
