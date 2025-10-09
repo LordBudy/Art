@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,15 +41,19 @@ class SearchViewModel(
         }
     }
 
-    //Дебаунс (Debounce) - задержка перед отправкой запроса
-    fun searchPictures(query: String) = viewModelScope.launch {
-        // Задержка в 300 мс
-        delay(300)
-        try {
+    //(Debounce) - задержка перед отправкой запроса
+    var searchJob: Job? = null
+    fun searchPictures(query: String) {
+        if (searchJob?.isActive == true) {
+            searchJob?.cancel()
+        }
+        searchJob = viewModelScope.launch {
+            Log.d("searchPictures", "клик на поиск")
+            delay(300)
+            Log.d("searchPictures", "задержка 300 млс запуска поиска")
             val result = getSearchPicturesUseCase(query)
             _pictures.value = result
-        } catch (e: Exception) {
-            Log.e("SearchViewModel", "Ошибка поиска изображений: ${e.message}", e)
+            Log.d("searchPictures", "поиск выполнен")
         }
     }
 }

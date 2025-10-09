@@ -28,13 +28,11 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 @Composable
 fun FastSearch(
     text: String,
-    // начинать новый поиск при вводе каждой новой буквы - накладно, поэтому или через нажание
-    // кнопки поиска искать или добавить какую-то задержку
     onValueChange: (String) -> Unit,
     onSearchClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var textState by remember { mutableStateOf(text) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -45,8 +43,9 @@ fun FastSearch(
     ) {
 
         OutlinedTextField(
-            value = textState,
-            onValueChange = { textState = it },
+            value = text,
+            onValueChange = { newText ->
+                onValueChange(newText)},
             maxLines = 1,
             placeholder = { Text(text = "Введите название") },
             modifier = Modifier
@@ -55,7 +54,7 @@ fun FastSearch(
                 .padding(horizontal = 8.dp)
         )
         IconButton(
-            onClick = { onSearchClick.invoke(textState) }
+            onClick = { onSearchClick.invoke(text) }
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -68,24 +67,24 @@ fun FastSearch(
     }
 }
 
-@PreviewLightDark
-@Composable
-fun FastSearchPreview() {
-    val textState = remember { mutableStateOf("Введите название") }
-
-    ArtPhotoFrameTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-        ) {
-            FastSearch(
-                text = textState.value,
-                onValueChange = { newText ->
-                    textState.value = newText
-                },
-                onSearchClick = {},
-            )
-        }
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun FastSearchPreview() {
+//    val textState = remember { mutableStateOf("Введите название") }
+//
+//    ArtPhotoFrameTheme {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = MaterialTheme.colorScheme.surface)
+//        ) {
+//            FastSearch(
+//                text = textState.value,
+//                onValueChange = { newText ->
+//                    textState.value = newText
+//                },
+//                onSearchClick = {},
+//            )
+//        }
+//    }
+//}

@@ -1,3 +1,4 @@
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -25,14 +26,16 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
 fun FullPicture(picture: Picture) {
-    val imageModel = picture.imageURL.firstOrNull() ?: painterResource(id = R.drawable.media)
+    val imageUrl = picture.imageURL.firstOrNull()
+    if (imageUrl != null) {
+        // Если URL есть, используем AsyncImage для загрузки из сети
         AsyncImage(
-            model = imageModel,
+            model = imageUrl,
             contentDescription = "Picture image",
-            contentScale = ContentScale.FillHeight,// Сохраняем пропорции
+            contentScale = ContentScale.FillHeight,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(16f / 9f)// Соотношение 16:9 или .aspectRatio(1f) // Соотношение сторон 1:1
+                .aspectRatio(16f / 9f)
                 .clip(RoundedCornerShape(10.dp))
                 .border(
                     width = 1.5.dp,
@@ -42,7 +45,24 @@ fun FullPicture(picture: Picture) {
             placeholder = painterResource(id = R.drawable.media),
             error = painterResource(id = R.drawable.media)
         )
+    } else {
+        // Если URL нет, используем Image с Painter (ресурсом)
+        Image(
+            painter = painterResource(id = R.drawable.media),
+            contentDescription = "Picture image",
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16f / 9f)
+                .clip(RoundedCornerShape(10.dp))
+                .border(
+                    width = 1.5.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = RoundedCornerShape(10.dp)
+                )
+        )
     }
+}
 
 
 //@PreviewLightDark
