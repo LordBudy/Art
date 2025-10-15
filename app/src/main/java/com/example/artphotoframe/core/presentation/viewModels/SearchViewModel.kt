@@ -31,8 +31,6 @@ class SearchViewModel(
 
     private fun loadAllPictures() = viewModelScope.launch {
         try {
-            // Здесь нужно определить, как получить все картины
-            // Например, можно сделать общий запрос без параметров
             val result = getSearchPicturesUseCase("*") // или другой универсальный запрос
             _allPictures.value = result
             _pictures.value = result
@@ -48,12 +46,12 @@ class SearchViewModel(
             searchJob?.cancel()
         }
         searchJob = viewModelScope.launch {
-            Log.d("searchPictures", "клик на поиск")
+
             delay(300)
-            Log.d("searchPictures", "задержка 300 млс запуска поиска")
+
             val result = getSearchPicturesUseCase(query)
             _pictures.value = result
-            Log.d("searchPictures", "поиск выполнен")
+
         }
     }
 }

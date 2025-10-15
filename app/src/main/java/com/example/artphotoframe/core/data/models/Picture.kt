@@ -7,23 +7,22 @@ package com.example.artphotoframe.core.data.models
 data class Picture(
     val id: String,
     val title: String?,
-    val imageURL: List<String>, // Храним список URL превью
+    val previewURL:String?,
+    val highQualityURL: String?,
     val description: String?
 ) {
     companion object {
         // Функция для преобразования EuropeanaItem в Picture
         // (аналогично JS-логике из почтальона)
         fun fromEuropeanaItem(item: EuropeanaItem): Picture {
-            // Handle title: массив -> join(", "), строка -> как есть, иначе fallback
+            // Handle title: массив -> join(", "),
+            // строка -> как есть, иначе fallback  Обработка заголовка
             val title = when {
                 item.dcTitle?.isNotEmpty() == true -> item.dcTitle.joinToString(", ")
                 else -> "No title available"
             }
 
-            // Image URL: напрямую, с возможным null
-            val imageURL = item.edmPreview ?: "Нет предварительного изображения URL"
-
-            // Handle description: аналогично title
+            // Handle description: аналогично title  Обработка описания
             val body = when {
                 item.dcDescription?.isNotEmpty() == true -> item.dcDescription.joinToString(", ")
                 else -> "No description available"
@@ -32,7 +31,8 @@ data class Picture(
             return Picture(
                 id = item.id,
                 title = title,
-                imageURL = item.edmPreview ?: emptyList(),
+                previewURL = item.edmPreview?.firstOrNull() ?: "No preview image URL",
+                highQualityURL = item.edmHighQuality?.firstOrNull() ?: "No high quality image URL",
                 description = body
             )
         }
