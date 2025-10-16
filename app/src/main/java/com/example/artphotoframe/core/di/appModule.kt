@@ -2,9 +2,19 @@ package com.example.artphotoframe.core.di
 
 
 import com.example.artphotoframe.core.data.ApiService
+import com.example.artphotoframe.core.data.FavoritePictureRepositoryImpl
 import com.example.artphotoframe.core.data.MetApi
 import com.example.artphotoframe.core.data.MetRepository
 import com.example.artphotoframe.core.data.SearchPictureFullRepositoryImpl
+import com.example.artphotoframe.core.data.db.AppDatabase
+import com.example.artphotoframe.core.data.db.model.PictureEntityMapper
+import com.example.artphotoframe.core.domain.favorites.AddToFavoritesUseCase
+import com.example.artphotoframe.core.domain.favorites.DeleteAllFavoritesUseCase
+import com.example.artphotoframe.core.domain.favorites.DeleteFavoriteUseCase
+import com.example.artphotoframe.core.domain.favorites.GetAllFavoritesUseCase
+import com.example.artphotoframe.core.domain.favorites.GetFavoriteByIdUseCase
+import com.example.artphotoframe.core.domain.favorites.PictureRepository
+import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
 import com.example.artphotoframe.core.presentation.screens.SearchViewModel
@@ -59,4 +69,27 @@ val appModule = module {
 
     // Metropolitan
     single<MetRepository> { MetRepository(get<MetApi>()) }
+
+    single {
+        AppDatabase.getDatabase(androidContext())
+    }
+
+    single { get<AppDatabase>().pictureDao() }
+
+    single { PictureEntityMapper() }
+
+    single <PictureRepository> {
+        FavoritePictureRepositoryImpl(
+            get(),// PictureDao
+            get()  // PictureEntityMapper
+        )
+    }
+
+    // UseCases
+    single { AddToFavoritesUseCase(get()) }
+    single { GetAllFavoritesUseCase(get()) }
+    single { GetFavoriteByIdUseCase(get()) }
+    single { DeleteFavoriteUseCase(get()) }
+    single { DeleteAllFavoritesUseCase(get()) }
+    single { UpdateFavoriteUseCase(get()) }
 }

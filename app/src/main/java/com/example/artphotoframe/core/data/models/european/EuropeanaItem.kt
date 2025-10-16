@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.data.models
+package com.example.artphotoframe.core.data.models.european
 
 import com.google.gson.annotations.SerializedName
 

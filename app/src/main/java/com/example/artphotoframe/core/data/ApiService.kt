@@ -1,6 +1,6 @@
 package com.example.artphotoframe.core.data
 
-import com.example.artphotoframe.core.data.models.EuropeanaSearchResponse
+import com.example.artphotoframe.core.data.models.european.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -13,5 +13,5 @@ interface ApiService {
         @Query("query") query: String,  // Параметр поиска
         @Query("wskey") wskey: String = "ytextrana",  //ключ
         @Query("rows") rows: Int = 100  // Количество результатов
-    ): EuropeanaSearchResponse  // Возвращаем объект ответа
+    ): SearchResponse  // Возвращаем объект ответа
 }

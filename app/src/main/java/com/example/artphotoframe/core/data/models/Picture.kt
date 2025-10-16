@@ -1,5 +1,7 @@
 package com.example.artphotoframe.core.data.models
 
+import com.example.artphotoframe.core.data.models.european.EuropeanaItem
+
 //Представляет конечную модель изображения
 //Содержит метод для преобразования данных из EuropeanaItem
 
