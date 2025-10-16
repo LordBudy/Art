@@ -16,8 +16,8 @@ fun PictureScreen() {
     val pic = Picture(
         id = "1",
         title = "Die Malkunst",
-        imageURL = listOf(
-            "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE"),
+        previewURL = "",
+        highQualityURL = "",
         description = "Daten nach Texteingabe migriert, Beschriftung: Signatur:"
     )
     ArtPhotoFrameTheme {

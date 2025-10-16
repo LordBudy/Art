@@ -9,7 +9,7 @@ import com.example.artphotoframe.core.domain.search.SearchRepository
 class SearchPictureFullRepositoryImpl(private val apiService: ApiService): SearchRepository {
     override suspend fun getSearchPictures(query: String): List<Picture> {
         val response: EuropeanaSearchResponse = apiService.searchPictures(query)
-        Log.d("SearchPictureFullRepositoryImpl", "response $response")
+
         return response.items?.map {
             Picture.fromEuropeanaItem(it) } ?: emptyList()
     }
