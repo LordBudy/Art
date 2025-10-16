@@ -1,11 +1,13 @@
-package com.example.artphotoframe.core.presentation.viewModels
+package com.example.artphotoframe.core.presentation.screens
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.artphotoframe.core.data.MetRepository
 import com.example.artphotoframe.core.data.models.Picture
+import com.example.artphotoframe.core.data.models.metropolitan.toPicture
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 //ViewModel для управления состоянием экрана SearchScreen
 //Использует StateFlow для хранения списка изображений
 class SearchViewModel(
-    private val getSearchPicturesUseCase: SearchPicturesUseCase
+    private val getSearchPicturesUseCase: SearchPicturesUseCase,
+    private val metRepository: MetRepository
 ) : ViewModel() {
 
     private val _pictures = MutableStateFlow<List<Picture>>(emptyList())
@@ -25,9 +28,9 @@ class SearchViewModel(
     private val _allPictures = mutableStateOf(emptyList<Picture>())
     val allPictures: State<List<Picture>> = _allPictures
 
-    init {
-        loadAllPictures() // Загружаем все картины при создании ViewModel
-    }
+    private var ids: List<Int> = emptyList()
+    private var page = 0
+    private val pageSize = 20
 
     private fun loadAllPictures() = viewModelScope.launch {
         try {
@@ -48,10 +51,19 @@ class SearchViewModel(
         searchJob = viewModelScope.launch {
 
             delay(300)
-
-            val result = getSearchPicturesUseCase(query)
-            _pictures.value = result
-
+            _pictures.value = emptyList()
+            ids = metRepository.searchIds(query)
+            page = 0
+            loadMore()
         }
+    }
+
+    fun loadMore() = viewModelScope.launch {
+        val start = page * pageSize
+        val slice = ids.drop(start).take(pageSize)
+        if (slice.isEmpty()) return@launch
+        val objs = metRepository.getObjectsBatched(slice)
+        _pictures.value = _pictures.value + objs.map { it.toPicture() }
+        page++
     }
 }
