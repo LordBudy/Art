@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.presentation.ui.FastSearch
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
-import com.example.artphotoframe.core.presentation.viewModels.SearchViewModel
+import com.example.artphotoframe.core.presentation.screens.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -34,6 +38,19 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
         .collectAsStateWithLifecycle(emptyList())
 
     val scope = rememberCoroutineScope()
+    val listState: LazyListState = rememberLazyListState()
+
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val total = listState.layoutInfo.totalItemsCount
+            total > 0 && lastVisible >= total - 6
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) viewModel.loadMore()
+    }
 
     // Добавлено: SnackbarHostState для уведомлений об ошибках
     val snackbarHostState = remember { SnackbarHostState() }
@@ -79,6 +96,7 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
 
             // Отображение результатов поиска
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
