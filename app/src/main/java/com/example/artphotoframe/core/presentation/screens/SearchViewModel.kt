@@ -30,7 +30,7 @@ class SearchViewModel(
 
     private var ids: List<Int> = emptyList()
     private var page = 0
-    private val pageSize = 20
+    private val pageSize = 20 //добавляем данные по 20 элементов
 
     private fun loadAllPictures() = viewModelScope.launch {
         try {

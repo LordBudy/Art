@@ -17,6 +17,7 @@ import com.example.artphotoframe.core.domain.favorites.PictureRepository
 import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
+import com.example.artphotoframe.core.presentation.screens.FavoritePicViewModel
 import com.example.artphotoframe.core.presentation.screens.SearchViewModel
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -58,13 +59,15 @@ val appModule = module {
     }
     single<MetApi> { get<Retrofit>(MetRetrofit).create(MetApi::class.java) }
 
+    // Репозиторий: реализация интерфейса  Search
+    single<SearchRepository> {
+        SearchPictureFullRepositoryImpl(get()) }
 
-    // Europeana
-    // Репозиторий: реализация интерфейса
-    single<SearchRepository> { SearchPictureFullRepositoryImpl(get()) }
-    // UseCase: зависит от репозитория
-    single { SearchPicturesUseCase(get()) }
-    // ViewModel: зависит от UseCase
+    // UseCase
+    single {
+        SearchPicturesUseCase(get()) }
+
+    // SearchViewModel
     viewModel { SearchViewModel(get(), get()) }
 
     // Metropolitan
@@ -74,10 +77,13 @@ val appModule = module {
         AppDatabase.getDatabase(androidContext())
     }
 
-    single { get<AppDatabase>().pictureDao() }
+    single {
+        get<AppDatabase>().pictureDao() }
 
-    single { PictureEntityMapper() }
+    single {
+        PictureEntityMapper() }
 
+// Репозиторий: реализация интерфейса Favorite
     single <PictureRepository> {
         FavoritePictureRepositoryImpl(
             get(),// PictureDao
@@ -92,4 +98,13 @@ val appModule = module {
     single { DeleteFavoriteUseCase(get()) }
     single { DeleteAllFavoritesUseCase(get()) }
     single { UpdateFavoriteUseCase(get()) }
+
+    // Добавлено: FullPictureViewModel
+    viewModel {
+        FavoritePicViewModel(
+            get(),
+            get(),
+            get()
+        )
+    }
 }
