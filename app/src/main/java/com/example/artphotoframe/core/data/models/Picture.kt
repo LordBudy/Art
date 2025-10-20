@@ -1,42 +1,30 @@
 package com.example.artphotoframe.core.data.models
 
-import com.example.artphotoframe.core.data.models.european.EuropeanaItem
+import com.example.artphotoframe.core.data.models.metropolitan.MetObject
 
 //Представляет конечную модель изображения
-//Содержит метод для преобразования данных из EuropeanaItem
+//Содержит метод для преобразования данных из MetObject
 
 
 data class Picture(
-    val id: String,
+    val id: Int,
     val title: String?,
-    val previewURL:String?,
+    val previewURL: String?,
     val highQualityURL: String?,
     val description: String?
 ) {
     companion object {
-        // Функция для преобразования EuropeanaItem в Picture
-        // (аналогично JS-логике из почтальона)
-        fun fromEuropeanaItem(item: EuropeanaItem): Picture {
-            // Handle title: массив -> join(", "),
-            // строка -> как есть, иначе fallback  Обработка заголовка
-            val title = when {
-                item.dcTitle?.isNotEmpty() == true -> item.dcTitle.joinToString(", ")
-                else -> "No title available"
-            }
-
-            // Handle description: аналогично title  Обработка описания
-            val body = when {
-                item.dcDescription?.isNotEmpty() == true -> item.dcDescription.joinToString(", ")
-                else -> "No description available"
-            }
-
+        fun fromMetObject(metObject: MetObject): Picture {
+            // Реализуйте маппинг полей, например:
             return Picture(
-                id = item.id,
-                title = title,
-                previewURL = item.edmPreview?.firstOrNull() ?: "No preview image URL",
-                highQualityURL = item.edmHighQuality?.firstOrNull() ?: "No high quality image URL",
-                description = body
+                id = metObject.objectID,  // Предполагая, что id - Int
+                title = metObject.title ?: "Unknown Title",
+                previewURL = metObject.primaryImageSmall ?: "",  // Маленькое изображение (превью)
+                highQualityURL = metObject.primaryImage ?: "",  // Высококачественное изображение
+                description = metObject.artistDisplayName
+                    ?: "Unknown Artist"
             )
         }
     }
+
 }

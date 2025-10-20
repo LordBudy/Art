@@ -17,25 +17,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
 fun FullPictureInfo(
     picture: Picture,
-
+    navController: NavController,
     //начальное состояние (true/false из ViewModel)
     isFavorite: Boolean,
-
     //для добавления AddToFavoritesUseCase
     onAddToFavorites: (Picture) -> Unit,
-
     //для удаления  DeleteFavoriteUseCase
     onRemoveFromFavorites: (Picture) -> Unit,
-
     //для обновления UpdateFavoriteUseCase
     onUpdateFavorites: (Picture) -> Unit,
-
     modifier: Modifier = Modifier
 ) {
 
@@ -57,7 +54,9 @@ fun FullPictureInfo(
             ) {
                 // Изображение
                 FullPicture(
-                    picture = picture
+                    picture = picture, onClick = {
+                        navController.navigate("picture_screen/${picture.id}")
+                    }
                 )
                 BtnFavorite(
                     picture = picture,
@@ -86,30 +85,30 @@ fun FullPictureInfo(
     }
 }
 
-@PreviewLightDark
-@Composable
-fun PreviewFullPictureInfo() {
-    val pic = Picture(
-        id = "1",
-        title = "Die Malkunst",
-        previewURL = "",
-        highQualityURL = "",
-        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
-    )
-    ArtPhotoFrameTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
-        ) {
-            FullPictureInfo(
-                picture = pic,
-                isFavorite = false,  // Пример: не избранное
-                onAddToFavorites = {},  // Пустые лямбды для preview
-                onRemoveFromFavorites = {},
-                onUpdateFavorites = {},
-                modifier = Modifier
-            )
-        }
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun PreviewFullPictureInfo() {
+//    val pic = Picture(
+//        id = "1",
+//        title = "Die Malkunst",
+//        previewURL = "",
+//        highQualityURL = "",
+//        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
+//    )
+//    ArtPhotoFrameTheme {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = Color.White)
+//        ) {
+//            FullPictureInfo(
+//                picture = pic,
+//                isFavorite = false,  // Пример: не избранное
+//                onAddToFavorites = {},  // Пустые лямбды для preview
+//                onRemoveFromFavorites = {},
+//                onUpdateFavorites = {},
+//                modifier = Modifier
+//            )
+//        }
+//    }
+//}

@@ -14,7 +14,7 @@ data class MetObject(
 
 fun MetObject.toPicture(): Picture =
     Picture(
-        id = objectID.toString(),
+        id = objectID,
         title = title?.ifBlank { null },
         previewURL = primaryImageSmall?.ifBlank { null },
         highQualityURL = primaryImage?.ifBlank { null },

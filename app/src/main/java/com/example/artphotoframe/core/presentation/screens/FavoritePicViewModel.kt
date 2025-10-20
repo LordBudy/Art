@@ -1,26 +1,63 @@
 package com.example.artphotoframe.core.presentation.screens
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.domain.favorites.AddToFavoritesUseCase
 import com.example.artphotoframe.core.domain.favorites.DeleteFavoriteUseCase
+import com.example.artphotoframe.core.domain.favorites.PictureRepository
 import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
+import com.example.artphotoframe.core.domain.search.SearchRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FavoritePicViewModel (
+class FavoritePicViewModel(
     private val addToFavoritesUseCase: AddToFavoritesUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
-    private val updateFavoriteUseCase: UpdateFavoriteUseCase
-): ViewModel(){
-    // Функция для проверки, является ли картинка избранной (из repository)
-    fun isFavorite(picture: Picture): Boolean {
-        // Реализуй логику: проверь в repository или кэше
-        // Например: return favoritesRepository.getFavoritePicture(picture.id) != null
-        return false // Заглушка (инжектируй repository и реализуй)
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase,
+    private val pictureRepository: PictureRepository,
+    private val searchRepository: SearchRepository
+) : ViewModel() {
+
+    // Состояние для хранения избранных картинок
+    private val _favorites = MutableStateFlow<List<Picture>>(emptyList())
+    val favorites: StateFlow<List<Picture>> = _favorites
+
+    // Состояние для текущей картинки
+    private val _currentPicture = MutableStateFlow<Picture?>(null)
+    val currentPicture: StateFlow<Picture?> = _currentPicture
+
+    // Состояние для isFavorite
+    private val _isFavorite = MutableStateFlow(false)
+    val isFavorite: StateFlow<Boolean> = _isFavorite
+
+    // Получение картинки по ID (сначала из API, затем из локальной БД если нужно)
+    fun loadPictureById(id: Int) {
+        viewModelScope.launch {
+            try {
+                // Сначала пытаемся загрузить из API
+                var picture = searchRepository.getPictureById(id)
+                if (picture == null) {
+                    // Если не найдено в API, пробуем локальную БД (для favorites)
+                    picture = pictureRepository.getPictureById(id)
+                }
+                _currentPicture.value = picture
+                Log.d("FavoritePicViewModel", "Loaded picture: $picture")
+                _isFavorite.value = picture?.let { isFavorite(it) } ?: false
+            } catch (e: Exception) {
+                Log.e("FavoritePicViewModel", "Error loading picture: ${e.message}")
+            }
+        }
     }
 
-    // Лямбды для передачи в UI
+    // является ли картинка избранной
+    fun isFavorite(picture: Picture): Boolean {
+        return favorites.value.any { it.id == picture.id }
+    }
+
+
     val onAddToFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             addToFavoritesUseCase.invoke(picture)

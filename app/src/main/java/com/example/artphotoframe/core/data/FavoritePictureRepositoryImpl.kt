@@ -24,11 +24,11 @@ class FavoritePictureRepositoryImpl (
         }
     }
 
-    override suspend fun getPictureById(id: String): Picture? {
+    override suspend fun getPictureById(id: Int): Picture? {
         return dao.getPictureById(id)?.let { mapper.fromEntity(it) }
     }
 
-    override suspend fun deletePictureById(id: String): Picture {
+    override suspend fun deletePictureById(id: Int): Picture {
         val picture = getPictureById(id)
         dao.deletePictureById(id)
         return picture ?: throw IllegalArgumentException("Picture not found")

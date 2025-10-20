@@ -40,39 +40,7 @@ val appModule = module {
             .cache(Cache(File(androidContext().cacheDir, "http"), 50L * 1024 * 1024))
             .build()
     }
-
-    single(EuropeanaRetrofit) {
-        Retrofit.Builder()
-            .baseUrl("https://api.europeana.eu/record/v2/")
-            .client(get())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    single { get<Retrofit>(EuropeanaRetrofit).create(ApiService::class.java) }
-
-    single(MetRetrofit) {
-        Retrofit.Builder()
-            .baseUrl("https://collectionapi.metmuseum.org/") // Met base
-            .client(get()) // same OkHttp
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    single<MetApi> { get<Retrofit>(MetRetrofit).create(MetApi::class.java) }
-
-    // Репозиторий: реализация интерфейса  Search
-    single<SearchRepository> {
-        SearchPictureFullRepositoryImpl(get()) }
-
-    // UseCase
-    single {
-        SearchPicturesUseCase(get()) }
-
-    // SearchViewModel
-    viewModel { SearchViewModel(get(), get()) }
-
-    // Metropolitan
-    single<MetRepository> { MetRepository(get<MetApi>()) }
-
+// Database
     single {
         AppDatabase.getDatabase(androidContext())
     }
@@ -83,7 +51,7 @@ val appModule = module {
     single {
         PictureEntityMapper() }
 
-// Репозиторий: реализация интерфейса Favorite
+    // Репозиторий: реализация интерфейса Favorite
     single <PictureRepository> {
         FavoritePictureRepositoryImpl(
             get(),// PictureDao
@@ -104,7 +72,43 @@ val appModule = module {
         FavoritePicViewModel(
             get(),
             get(),
+            get(),
+            get(),
             get()
         )
     }
+
+    single(EuropeanaRetrofit) {
+        Retrofit.Builder()
+            .baseUrl("https://api.europeana.eu/record/v2/")
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    single { get<Retrofit>(EuropeanaRetrofit)
+        .create(ApiService::class.java) }
+
+    single(MetRetrofit) {
+        Retrofit.Builder()
+            .baseUrl("https://collectionapi.metmuseum.org/")
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    single<MetApi> { get<Retrofit>(MetRetrofit).create(MetApi::class.java) }
+
+//     Репозиторий: реализация интерфейса  Search
+    single<SearchRepository> {
+        SearchPictureFullRepositoryImpl(get())
+    }
+
+    // UseCase
+    single {
+        SearchPicturesUseCase(get()) }
+
+    // SearchViewModel
+    viewModel { SearchViewModel(get(), get()) }
+
+    // Metropolitan
+    single<MetRepository> { MetRepository(get<MetApi>()) }
 }

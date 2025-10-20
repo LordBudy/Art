@@ -19,9 +19,11 @@ class MetRepository (
     private val memory = LruCache<Int, MetObject>(500)
 
     suspend fun searchIds(query: String): List<Int> =
-        withContext(io) { api.search(q = query, hasImages = true).objectIDs.orEmpty() }
+        withContext(io) {
+            api.search(q = query, hasImages = true).objectIDs.orEmpty() }
 
-    suspend fun getObjectsBatched(ids: List<Int>): List<MetObject> = coroutineScope {
+    suspend fun getObjectsBatched(ids: List<Int>):
+            List<MetObject> = coroutineScope {
         ids.map { id ->
             async(io) {
                 memory.get(id)?.let { return@async it }
@@ -33,4 +35,14 @@ class MetRepository (
             }
         }.awaitAll().filterNotNull()
     }
+    // Новый метод для получения одного объекта по ID
+    suspend fun getObjectById(id: Int): MetObject? =
+        withContext(io) {
+            memory.get(id)?.let { return@withContext it }
+            semaphore.withPermit {
+                runCatching { api.objectDetails(id) }.getOrNull()
+                    ?.takeIf { !it.primaryImageSmall.isNullOrBlank() && !it.primaryImage.isNullOrBlank() }
+                    ?.also { memory.put(id, it) }
+            }
+        }
 }

@@ -9,9 +9,9 @@ interface PictureRepository{
 
     fun getAllPictures(): Flow<List<Picture>>
 
-    suspend fun getPictureById(id: String): Picture?
+    suspend fun getPictureById(id: Int): Picture?
 
-    suspend fun deletePictureById(id: String): Picture
+    suspend fun deletePictureById(id: Int): Picture
 
     suspend fun deleteAllPictures(): Flow<List<Picture>>
 

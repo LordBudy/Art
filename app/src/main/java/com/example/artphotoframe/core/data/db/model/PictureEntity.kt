@@ -10,7 +10,7 @@ data class PictureEntity(
     val id: Long = 0,
 
     @ColumnInfo(name = "picture_id")
-    val pictureId: String,
+    val pictureId: Int,
 
     @ColumnInfo(name = "title")
     val title: String,

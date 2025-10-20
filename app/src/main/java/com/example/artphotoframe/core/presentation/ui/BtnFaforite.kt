@@ -59,7 +59,7 @@ fun BtnFavorite(
 @Composable
 fun PreviewHeartCheckbox() {
     val pic = Picture(
-        id = "1",
+        id = 1,
         title = "Test",
         previewURL = "",
         highQualityURL = "",

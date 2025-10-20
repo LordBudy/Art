@@ -4,7 +4,7 @@ import com.example.artphotoframe.core.data.models.Picture
 
 class DeleteFavoriteUseCase(private val repository: PictureRepository) {
 
-    suspend fun invoke(params: String): Picture? {
+    suspend fun invoke(params: Int): Picture? {
         return repository.deletePictureById(params)
     }
 }
