@@ -4,9 +4,11 @@ import FullPicture
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
@@ -40,7 +43,14 @@ fun FullPictureInfo(
         Column(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.background)
+                //автоматически добавляет(padding) под системные панели
+                .systemBarsPadding()
         ) {
+            Row() {
+                BackButton(
+                    onClick = {navController.popBackStack()},
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             // Заголовок
             Text(
                 text = picture.title ?: "Нет заголовка",
@@ -49,12 +59,14 @@ fun FullPictureInfo(
                 modifier = Modifier
                     .padding(15.dp)
             )
+        }
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Изображение
                 FullPicture(
-                    picture = picture, onClick = {
+                    picture = picture,
+                    onClick = {
                         navController.navigate("picture_screen/${picture.id}")
                     }
                 )
@@ -85,30 +97,31 @@ fun FullPictureInfo(
     }
 }
 
-//@PreviewLightDark
-//@Composable
-//fun PreviewFullPictureInfo() {
-//    val pic = Picture(
-//        id = "1",
-//        title = "Die Malkunst",
-//        previewURL = "",
-//        highQualityURL = "",
-//        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
-//    )
-//    ArtPhotoFrameTheme {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = Color.White)
-//        ) {
-//            FullPictureInfo(
-//                picture = pic,
-//                isFavorite = false,  // Пример: не избранное
-//                onAddToFavorites = {},  // Пустые лямбды для preview
-//                onRemoveFromFavorites = {},
-//                onUpdateFavorites = {},
-//                modifier = Modifier
-//            )
-//        }
-//    }
-//}
+@PreviewLightDark
+@Composable
+fun PreviewFullPictureInfo() {
+    val pic = Picture(
+        id = 1,
+        title = "Die Malkunst",
+        previewURL = "",
+        highQualityURL = "",
+        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
+    )
+    ArtPhotoFrameTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+        ) {
+            FullPictureInfo(
+                picture = pic,
+                isFavorite = false,  // Пример: не избранное
+                onAddToFavorites = {},  // Пустые лямбды для preview
+                onRemoveFromFavorites = {},
+                onUpdateFavorites = {},
+                modifier = Modifier,
+                navController = rememberNavController()
+            )
+        }
+    }
+}

@@ -25,9 +25,6 @@ class SearchViewModel(
     private val _pictures = MutableStateFlow<List<Picture>>(emptyList())
     val pictures: StateFlow<List<Picture>> = _pictures
 
-    private val _allPictures = mutableStateOf(emptyList<Picture>())
-    val allPictures: State<List<Picture>> = _allPictures
-
     private var ids: List<Int> = emptyList()
     private var page = 0
     private val pageSize = 20 //добавляем данные по 20 элементов

@@ -55,29 +55,29 @@ fun BtnFavorite(
     }
 }
 
-@PreviewLightDark
-@Composable
-fun PreviewHeartCheckbox() {
-    val pic = Picture(
-        id = 1,
-        title = "Test",
-        previewURL = "",
-        highQualityURL = "",
-        description = "Test"
-    )
-    ArtPhotoFrameTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
-        ) {
-            BtnFavorite(
-                picture = pic,
-                isFavorite = false,
-                onAddToFavorites = {},
-                onRemoveFromFavorites = {},
-                onUpdateFavorites = {}
-            )
-        }
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun PreviewHeartCheckbox() {
+//    val pic = Picture(
+//        id = 1,
+//        title = "Test",
+//        previewURL = "",
+//        highQualityURL = "",
+//        description = "Test"
+//    )
+//    ArtPhotoFrameTheme {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = Color.White)
+//        ) {
+//            BtnFavorite(
+//                picture = pic,
+//                isFavorite = false,
+//                onAddToFavorites = {},
+//                onRemoveFromFavorites = {},
+//                onUpdateFavorites = {}
+//            )
+//        }
+//    }
+//}
