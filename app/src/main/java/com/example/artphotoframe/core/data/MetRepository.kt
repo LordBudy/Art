@@ -35,7 +35,7 @@ class MetRepository (
             }
         }.awaitAll().filterNotNull()
     }
-    // Новый метод для получения одного объекта по ID
+    //метод для получения одного объекта по ID
     suspend fun getObjectById(id: Int): MetObject? =
         withContext(io) {
             memory.get(id)?.let { return@withContext it }

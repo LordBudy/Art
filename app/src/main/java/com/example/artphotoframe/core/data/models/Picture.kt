@@ -15,7 +15,6 @@ data class Picture(
 ) {
     companion object {
         fun fromMetObject(metObject: MetObject): Picture {
-            // Реализуйте маппинг полей, например:
             return Picture(
                 id = metObject.objectID,  // Предполагая, что id - Int
                 title = metObject.title ?: "Unknown Title",

@@ -1,6 +1,7 @@
 package com.example.artphotoframe.core.presentation.screens
 
 import FullPicture
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,23 +60,27 @@ fun SearchScreen(
     }
 
     // для уведомлений об ошибках
-    val snackbarHostState = remember { SnackbarHostState() }
+//    val snackbarHostState = remember { SnackbarHostState() }
     // Состояние для текста поиска
     var searchText by remember { mutableStateOf("") }
 
-    // Debounce для поиска: ждём 500мс после последнего ввода
-    LaunchedEffect(searchText) {
-        if (searchText.isNotBlank() && searchText.length > 2) {
-            delay(500)  // Задержка 500мс
-            try {
-                viewModel.searchPictures(searchText)
-            } catch (e: Exception) {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Ошибка поиска: ${e.localizedMessage}")
-                }
-            }
-        }
-    }
+//    // Debounce для поиска: ждём 500мс после последнего ввода
+//    LaunchedEffect(searchText) {
+//        if (searchText.length > 2) {
+//            delay(500)  // Задержка 500мс
+//            try {
+//                Log.d("LaunchedEffect", "вызываем searchPictures")
+//                viewModel.searchPictures(searchText)
+//            } catch (e: Exception) {
+//                scope.launch {
+//                    snackbarHostState.showSnackbar("Ошибка поиска: ${e.localizedMessage}")
+//                }
+//            }
+//        }else if (searchText.isNotBlank()){
+//            Log.d("LaunchedEffect", "вызываем loadAllPictures")
+//            viewModel.loadAllPictures()
+//        }
+//    }
 
     ArtPhotoFrameTheme {
         Column(
@@ -92,7 +97,13 @@ fun SearchScreen(
                     searchText = newText
                 },
                 onSearchClick = { query ->
-                    viewModel.searchPictures(query)
+                    if (query.isBlank()) {
+                        Log.d("LaunchedEffect", "вызываем loadAllPictures")
+                        viewModel.loadAllPictures()
+                    } else {
+                        Log.d("LaunchedEffect", "вызываем searchPictures")
+                        viewModel.searchPictures(query)
+                    }
                 },
                 modifier =
                     Modifier.padding(bottom = 8.dp)
