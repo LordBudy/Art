@@ -67,24 +67,24 @@ fun FastSearch(
     }
 }
 
-//@PreviewLightDark
-//@Composable
-//fun FastSearchPreview() {
-//    val textState = remember { mutableStateOf("Введите название") }
-//
-//    ArtPhotoFrameTheme {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = MaterialTheme.colorScheme.surface)
-//        ) {
-//            FastSearch(
-//                text = textState.value,
-//                onValueChange = { newText ->
-//                    textState.value = newText
-//                },
-//                onSearchClick = {},
-//            )
-//        }
-//    }
-//}
+@PreviewLightDark
+@Composable
+fun FastSearchPreview() {
+    val textState = remember { mutableStateOf("Введите название") }
+
+    ArtPhotoFrameTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.surface)
+        ) {
+            FastSearch(
+                text = textState.value,
+                onValueChange = { newText ->
+                    textState.value = newText
+                },
+                onSearchClick = {},
+            )
+        }
+    }
+}

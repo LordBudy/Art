@@ -1,6 +1,7 @@
 package com.example.artphotoframe.core.presentation.screens
 
 import FullPicture
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,18 +26,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.artphotoframe.core.data.models.Picture
 import com.example.artphotoframe.core.presentation.ui.FastSearch
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import com.example.artphotoframe.core.presentation.screens.SearchViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
+fun SearchScreen(
+    navController: NavController,
+    viewModel: SearchViewModel = koinViewModel()
+) {
     val pictures by viewModel.pictures
+        //для автоматического управления жизненным циклом collectAsStateWithLifecycle()
         .collectAsStateWithLifecycle(emptyList())
-
+    // Создаем корутину
     val scope = rememberCoroutineScope()
     val listState: LazyListState = rememberLazyListState()
 
@@ -52,22 +59,15 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
         if (shouldLoadMore) viewModel.loadMore()
     }
 
-    // Добавлено: SnackbarHostState для уведомлений об ошибках
-    val snackbarHostState = remember { SnackbarHostState() }
-
     // Состояние для текста поиска
     var searchText by remember { mutableStateOf("") }
 
-    // можно добавить тестовые данные для превью сюда:
 
     ArtPhotoFrameTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    color =
-                        MaterialTheme.colorScheme.background
-                )
+                .background(color = MaterialTheme.colorScheme.background)
                 .systemBarsPadding()
         ) {
 
@@ -76,19 +76,15 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
                 text = searchText,
                 onValueChange = { newText ->
                     searchText = newText
-                    if (newText.isNotBlank() && newText.length > 2) {
-                        scope.launch {
-                            try {
-                                viewModel.searchPictures(newText)
-                            } catch (e: Exception) {
-                                // Показываем ошибку в Snackbar
-                                snackbarHostState.showSnackbar("Ошибка поиска: ${e.localizedMessage}")
-                            }
-                        }
-                    }
                 },
                 onSearchClick = { query ->
-                    viewModel.searchPictures(query)
+                    if (query.isBlank()) {
+                        Log.d("LaunchedEffect", "вызываем loadAllPictures")
+                        viewModel.loadAllPictures()
+                    } else {
+                        Log.d("LaunchedEffect", "вызываем searchPictures")
+                        viewModel.searchPictures(query)
+                    }
                 },
                 modifier =
                     Modifier.padding(bottom = 8.dp)
@@ -101,7 +97,13 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
                     .fillMaxSize()
             ) {
                 items(pictures) { picture ->
-                    FullPicture(picture = picture)
+                    FullPicture(picture = picture,
+                        onClick = {
+                            navController
+                                .navigate("picture_screen/${picture.id}")
+
+                        }
+                    )
                     HorizontalDivider() // Разделитель между изображениями
                 }
             }

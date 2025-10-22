@@ -25,18 +25,16 @@ class SearchViewModel(
     private val _pictures = MutableStateFlow<List<Picture>>(emptyList())
     val pictures: StateFlow<List<Picture>> = _pictures
 
-    private val _allPictures = mutableStateOf(emptyList<Picture>())
-    val allPictures: State<List<Picture>> = _allPictures
-
     private var ids: List<Int> = emptyList()
     private var page = 0
-    private val pageSize = 20
+    private val pageSize = 20 //добавляем данные по 20 элементов
 
-    private fun loadAllPictures() = viewModelScope.launch {
+    fun loadAllPictures() = viewModelScope.launch {
         try {
-            val result = getSearchPicturesUseCase("*") // или другой универсальный запрос
-            _allPictures.value = result
-            _pictures.value = result
+            ids = metRepository.searchIds("*")
+            page = 0
+            _pictures.value = emptyList()
+            loadMore()
         } catch (e: Exception) {
             Log.e("SearchViewModel", "Ошибка загрузки всех изображений: ${e.message}", e)
         }
