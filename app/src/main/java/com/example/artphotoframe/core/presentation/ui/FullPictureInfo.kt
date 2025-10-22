@@ -48,18 +48,18 @@ fun FullPictureInfo(
         ) {
             Row() {
                 BackButton(
-                    onClick = {navController.popBackStack()},
+                    onClick = { navController.popBackStack() },
                     color = MaterialTheme.colorScheme.onBackground
                 )
-            // Заголовок
-            Text(
-                text = picture.title ?: "Нет заголовка",
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .padding(15.dp)
-            )
-        }
+                // Заголовок
+                Text(
+                    text = picture.title ?: "Нет заголовка",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .padding(15.dp)
+                )
+            }
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -92,6 +92,13 @@ fun FullPictureInfo(
                     .padding(15.dp)
                     .wrapContentHeight(unbounded = true)
 
+            )
+
+            FavoritesButton(
+                color = MaterialTheme.colorScheme.onBackground,
+                //переход в избранное
+                onClick = {navController.navigate("search_screen")},
+                modifier = Modifier
             )
         }
     }
