@@ -23,12 +23,12 @@ fun BtnFavorite(
     modifier: Modifier = Modifier
 ) {
 
-    var isChecked by remember { mutableStateOf(isFavorite) }  // Начальное значение true, как в твоём примере
+    var isChecked by remember(isFavorite) { mutableStateOf(isFavorite) }  // Начальное значение true, как в твоём примере
 
     IconButton(
         onClick = {
             if (!isChecked) {
-                // клик "добавить" = true
+                // клик добавить = true
                 onAddToFavorites(picture)
             } else {
                 //клик удалить = false

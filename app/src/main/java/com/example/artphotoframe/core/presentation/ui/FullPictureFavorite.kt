@@ -1,6 +1,5 @@
 package com.example.artphotoframe.core.presentation.ui
 
-import FullPicture
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,9 +66,10 @@ fun FullPictureFavorite(
                     )
             )
         }
+        // Кнопка избранного
         BtnFavorite(
             picture = picture,
-            isFavorite = isFavorite,
+            isFavorite = isFavorite,// Передаём напрямую (BtnFavorite сам управляет toggle)
             onAddToFavorites = onAddToFavorites,
             onRemoveFromFavorites = onRemoveFromFavorites,
             onUpdateFavorites = onUpdateFavorites,

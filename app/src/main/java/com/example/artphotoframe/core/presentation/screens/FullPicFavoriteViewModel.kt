@@ -11,6 +11,7 @@ import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class FullPicFavoriteViewModel(
@@ -23,7 +24,7 @@ class FullPicFavoriteViewModel(
 
     // Состояние для хранения избранных картинок
     private val _favorites = MutableStateFlow<List<Picture>>(emptyList())
-    val favorites: StateFlow<List<Picture>> = _favorites
+    val favorites: StateFlow<List<Picture>> = _favorites.asStateFlow()
 
     // Состояние для текущей картинки
     private val _currentPicture = MutableStateFlow<Picture?>(null)

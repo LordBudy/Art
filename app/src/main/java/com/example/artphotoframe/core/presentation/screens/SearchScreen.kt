@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.room.util.query
 import com.example.artphotoframe.core.presentation.ui.FastSearch
+import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -38,6 +39,7 @@ fun SearchScreen(
     val pictures by viewModel.pictures
         //для автоматического управления жизненным циклом collectAsStateWithLifecycle()
         .collectAsStateWithLifecycle(emptyList())
+
     val listState: LazyListState = rememberLazyListState()
 
     val shouldLoadMore by remember {
@@ -89,13 +91,18 @@ fun SearchScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                items(pictures) { picture ->
-                    FullPicture(picture = picture,
+                items(pictures,
+                    key = { picture -> picture.id }
+                ) { picture ->
+                    FullPictureFavorite(
+                        picture = picture,
                         onClick = {
                             navController
-                                .navigate("picture_screen/${picture.id}")
-
-                        }
+                                .navigate("picture_screen/${picture.id}") },
+                        isFavorite = viewModel.isFavorite(picture),
+                        onAddToFavorites = {},
+                        onRemoveFromFavorites = {},
+                        onUpdateFavorites = {}
                     )
                     HorizontalDivider() // Разделитель между изображениями
                 }
