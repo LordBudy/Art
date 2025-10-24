@@ -19,12 +19,6 @@ class SearchViewModel(
     private val _pictures = MutableStateFlow<List<Picture>>(emptyList())
     val pictures: StateFlow<List<Picture>> = _pictures
 
-    private val _favorites = MutableStateFlow<List<Picture>>(emptyList())  // Или загружай из репозитория
-    val favorites: StateFlow<List<Picture>> = _favorites.asStateFlow()
-
-    fun isFavorite(picture: Picture): Boolean {
-        return favorites.value.any { it.id == picture.id }
-    }
     private var page = 0
     private val pageSize = 20 //добавляем данные по 20 элементов
     private var currentQuery: String = "*"

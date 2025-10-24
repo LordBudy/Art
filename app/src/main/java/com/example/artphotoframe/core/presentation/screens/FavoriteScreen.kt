@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.artphotoframe.core.presentation.ui.FavoritesButton
 import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
+import com.example.artphotoframe.core.presentation.ui.HomeButton
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,7 +56,7 @@ fun FavoriteScreen(
     ArtPhotoFrameTheme {
         Scaffold(
             floatingActionButton = {
-                FavoritesButton(
+                HomeButton(
                     color = MaterialTheme.colorScheme.onBackground,
                     //переход в избранное
                     onClick = { navController.navigate("search_screen") },
