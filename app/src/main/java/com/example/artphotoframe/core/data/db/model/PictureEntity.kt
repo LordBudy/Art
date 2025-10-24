@@ -3,6 +3,7 @@ package com.example.artphotoframe.core.data.db.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import javax.xml.namespace.QName
 
 @Entity(tableName = "pictures")
 data class PictureEntity(
@@ -22,5 +23,8 @@ data class PictureEntity(
     val highQualityURL: String,
 
     @ColumnInfo(name = "description")
-    val description: String
+    val description: String,
+
+    @ColumnInfo(name = "favorites")
+    val isFavorite: Boolean
 )

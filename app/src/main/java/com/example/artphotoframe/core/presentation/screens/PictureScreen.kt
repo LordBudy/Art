@@ -1,6 +1,6 @@
 package com.example.artphotoframe.core.presentation.screens
 
-import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,13 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.artphotoframe.core.data.models.Picture
-import com.example.artphotoframe.core.presentation.ui.BackButton
+import com.example.artphotoframe.core.presentation.ui.FavoritesButton
 import com.example.artphotoframe.core.presentation.ui.FullPictureInfo
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
@@ -31,7 +28,7 @@ fun PictureScreen(
     pictureId: Int,
     navController: NavController
 ) {
-    val viewModel: FavoritePicViewModel = koinViewModel()
+    val viewModel: FullPicFavoriteViewModel = koinViewModel()
 
     // Загружаем картинку при создании экрана
     LaunchedEffect(pictureId) {
@@ -42,7 +39,8 @@ fun PictureScreen(
     val isFavorite by viewModel.isFavorite.collectAsState()
 
     // remember для кэширования состояния
-    val cachedPicture by remember(picture) { mutableStateOf(picture) }
+    val cachedPicture by remember(picture) {
+        mutableStateOf(picture) }
 
     if (cachedPicture != null) {
         ArtPhotoFrameTheme {
@@ -59,10 +57,6 @@ fun PictureScreen(
                     onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
                     onUpdateFavorites = viewModel.onUpdateFavorites
                 )
-//                FavoritesButton(
-//                    onClick = {}
-//                )
-
             }
         }
     } else {

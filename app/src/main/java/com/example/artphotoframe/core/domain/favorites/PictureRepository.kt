@@ -7,7 +7,7 @@ interface PictureRepository{
 
     suspend fun addToFavorites(picture: Picture)
 
-    fun getAllPictures(): Flow<List<Picture>>
+    fun loadFavoritePictures(): Flow<List<Picture>>
 
     suspend fun getPictureById(id: Int): Picture?
 
@@ -15,5 +15,7 @@ interface PictureRepository{
 
     suspend fun deleteAllPictures(): Flow<List<Picture>>
 
-    suspend fun updatePictures(picture: Picture)
+    suspend fun updatePictures(pictures: List<Picture>)
+
+
 }

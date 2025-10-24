@@ -4,7 +4,7 @@ import com.example.artphotoframe.core.data.models.Picture
 
          //Интерфейс репозитория
 interface SearchRepository {
-   suspend fun getSearchPictures(query: String): List<Picture>
+   suspend fun getSearchPictures(query: String, page: Int, pageSize: Int): List<Picture>
 
    suspend fun getPictureById(id: Int): Picture?
 }

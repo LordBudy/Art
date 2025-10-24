@@ -11,7 +11,8 @@ class PictureEntityMapper {
             title = picture.title ?: "",
             previewURL = picture.previewURL ?: "",
             highQualityURL = picture.highQualityURL ?: "",
-            description = picture.description ?: ""
+            description = picture.description ?: "",
+            isFavorite = true
         )
     }
 

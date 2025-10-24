@@ -13,26 +13,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.artphotoframe.core.data.models.Picture
+import androidx.room.util.query
 import com.example.artphotoframe.core.presentation.ui.FastSearch
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
-import com.example.artphotoframe.core.presentation.screens.SearchViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -43,8 +38,6 @@ fun SearchScreen(
     val pictures by viewModel.pictures
         //для автоматического управления жизненным циклом collectAsStateWithLifecycle()
         .collectAsStateWithLifecycle(emptyList())
-    // Создаем корутину
-    val scope = rememberCoroutineScope()
     val listState: LazyListState = rememberLazyListState()
 
     val shouldLoadMore by remember {

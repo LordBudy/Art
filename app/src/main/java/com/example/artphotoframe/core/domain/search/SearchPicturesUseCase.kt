@@ -6,8 +6,8 @@ import com.example.artphotoframe.core.data.models.Picture
             //Абстрагирует логику поиска
 class SearchPicturesUseCase(private val searchRepository: SearchRepository) {
 
-    suspend operator fun invoke(query: String): List<Picture> {
-        return searchRepository.getSearchPictures(query)
+    suspend operator fun invoke(query: String, page: Int, pageSize: Int): List<Picture> {
+        return searchRepository.getSearchPictures(query, page, pageSize)
     }
 
 }

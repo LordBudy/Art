@@ -47,7 +47,7 @@ fun FullPictureInfo(
                 FavoritesButton(
                     color = MaterialTheme.colorScheme.onBackground,
                     //переход в избранное
-                    onClick = { navController.navigate("search_screen") },
+                    onClick = { navController.navigate("favorite_screen") },
                     modifier = Modifier
                 )
             },
@@ -72,26 +72,19 @@ fun FullPictureInfo(
                                 .padding(15.dp)
                         )
                     }
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        // Изображение
-                        FullPicture(
-                            picture = picture,
-                            onClick = {
-                                navController.navigate("picture_screen/${picture.id}")
-                            }
-                        )
-                        BtnFavorite(
-                            picture = picture,
-                            isFavorite = isFavorite,
-                            onAddToFavorites = onAddToFavorites,
-                            onRemoveFromFavorites = onRemoveFromFavorites,
-                            onUpdateFavorites = onUpdateFavorites,
-                            modifier = Modifier.align(Alignment.TopEnd)  // Позиционирование в правом верхнем углу
-                        )
 
-                    }
+                    // Изображение
+                    FullPictureFavorite(
+                        picture = picture,
+                        onClick = {
+                            navController.navigate("picture_screen/${picture.id}")
+                        },
+                        isFavorite = isFavorite,
+                        onAddToFavorites = onAddToFavorites,
+                        onRemoveFromFavorites = onRemoveFromFavorites,
+                        onUpdateFavorites = onUpdateFavorites
+                    )
+
 
                     // Описание
                     Text(
