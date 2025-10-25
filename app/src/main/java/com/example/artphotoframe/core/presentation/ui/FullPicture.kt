@@ -57,26 +57,26 @@ fun FullPicture(picture: Picture,
     }
 }
 
-//@PreviewLightDark
-//@Composable
-//fun PreviewFullPicture() {
-//    val pic = Picture(
-//        id = "1",
-//        title = "Die Malkunst",
-//        previewURL = "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE",
-//        highQualityURL = null,
-//        description = "Daten nach Texteingabe migriert, Beschriftung:"
-//    )
-//    ArtPhotoFrameTheme {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = MaterialTheme.colorScheme.onSurface)
-//        ) {
-//            FullPicture(
-//                picture = pic,
-//                onClick = {}
-//            )
-//        }
-//    }
-//}
+@PreviewLightDark
+@Composable
+fun PreviewFullPicture() {
+    val pic = Picture(
+        id = 1,
+        title = "Die Malkunst",
+        previewURL = "https://api.europeana.eu/thumbnail/v2/url.json?uri=http%3A%2F%2Fimageapi.khm.at%2Fimages%2F2574%2FGG_9128_Web.jpg&type=IMAGE",
+        highQualityURL = null,
+        description = "Daten nach Texteingabe migriert, Beschriftung:"
+    )
+    ArtPhotoFrameTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.onSurface)
+        ) {
+            FullPicture(
+                picture = pic,
+                onClick = {}
+            )
+        }
+    }
+}

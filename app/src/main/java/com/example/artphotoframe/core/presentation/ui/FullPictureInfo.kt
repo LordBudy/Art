@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,67 +41,66 @@ fun FullPictureInfo(
 ) {
 
     ArtPhotoFrameTheme {
-        Column(
-            modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.background)
-                //автоматически добавляет(padding) под системные панели
-                .systemBarsPadding()
-        ) {
-            Row() {
-                BackButton(
-                    onClick = { navController.popBackStack() },
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                // Заголовок
-                Text(
-                    text = picture.title ?: "Нет заголовка",
-                    fontSize = 20.sp,
+        Scaffold(
+            modifier = modifier,
+            floatingActionButton = {
+                FavoritesButton(
                     color = MaterialTheme.colorScheme.onBackground,
+                    //переход в избранное
+                    onClick = { navController.navigate("favorite_screen") },
                     modifier = Modifier
-                        .padding(15.dp)
                 )
-            }
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Изображение
-                FullPicture(
-                    picture = picture,
-                    onClick = {
-                        navController.navigate("picture_screen/${picture.id}")
+            },
+            content = { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colorScheme.background)
+                        //автоматически добавляет(padding) под системные панели
+                        .padding(innerPadding)
+                ) {
+                    Row {
+                        BackButton(
+                            onClick = { navController.popBackStack() },
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        // Заголовок
+                        Text(
+                            text = picture.title ?: "Нет заголовка",
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .padding(15.dp)
+                        )
                     }
-                )
-                BtnFavorite(
-                    picture = picture,
-                    isFavorite = isFavorite,
-                    onAddToFavorites = onAddToFavorites,
-                    onRemoveFromFavorites = onRemoveFromFavorites,
-                    onUpdateFavorites = onUpdateFavorites,
-                    modifier = Modifier.align(Alignment.TopEnd)  // Позиционирование в правом верхнем углу
-                )
 
+                    // Изображение
+                    FullPictureFavorite(
+                        picture = picture,
+                        onClick = {
+                            navController.navigate("picture_screen/${picture.id}")
+                        },
+                        isFavorite = isFavorite,
+                        onAddToFavorites = onAddToFavorites,
+                        onRemoveFromFavorites = onRemoveFromFavorites,
+                        onUpdateFavorites = onUpdateFavorites
+                    )
+
+
+                    // Описание
+                    Text(
+                        // Обработка null
+                        text = picture.description ?: "Нет описания",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(15.dp)
+                            .wrapContentHeight(unbounded = true)
+
+                    )
+                }
             }
-
-            // Описание
-            Text(
-                // Обработка null
-                text = picture.description ?: "Нет описания",
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .wrapContentHeight(unbounded = true)
-
-            )
-
-            FavoritesButton(
-                color = MaterialTheme.colorScheme.onBackground,
-                //переход в избранное
-                onClick = {navController.navigate("search_screen")},
-                modifier = Modifier
-            )
-        }
+        )
     }
 }
 
@@ -122,8 +122,8 @@ fun PreviewFullPictureInfo() {
         ) {
             FullPictureInfo(
                 picture = pic,
-                isFavorite = false,  // Пример: не избранное
-                onAddToFavorites = {},  // Пустые лямбды для preview
+                isFavorite = false,
+                onAddToFavorites = {},
                 onRemoveFromFavorites = {},
                 onUpdateFavorites = {},
                 modifier = Modifier,

@@ -17,7 +17,7 @@ import com.example.artphotoframe.core.domain.favorites.PictureRepository
 import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
-import com.example.artphotoframe.core.presentation.screens.FavoritePicViewModel
+import com.example.artphotoframe.core.presentation.screens.FullPicFavoriteViewModel
 import com.example.artphotoframe.core.presentation.screens.SearchViewModel
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -69,7 +69,7 @@ val appModule = module {
 
     // Добавлено: FullPictureViewModel
     viewModel {
-        FavoritePicViewModel(
+        FullPicFavoriteViewModel(
             get(),
             get(),
             get(),
@@ -107,7 +107,7 @@ val appModule = module {
         SearchPicturesUseCase(get()) }
 
     // SearchViewModel
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get()) }
 
     // Metropolitan
     single<MetRepository> { MetRepository(get<MetApi>()) }

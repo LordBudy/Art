@@ -13,7 +13,7 @@ interface PictureDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(picture: PictureEntity)
 
-    @Query("SELECT * FROM pictures")
+    @Query("SELECT DISTINCT * FROM pictures WHERE favorites = 1 ORDER BY picture_id ASC")
     fun getAllPictures(): Flow<List<PictureEntity>>
 
     @Query("SELECT * FROM pictures WHERE picture_id = :id")
@@ -26,5 +26,5 @@ interface PictureDao {
     suspend fun deleteAllPictures(): Int
 
     @Update
-    suspend fun updatePictures(pictures: PictureEntity)
+    suspend fun updatePictures(pictures: List<PictureEntity>)
 }

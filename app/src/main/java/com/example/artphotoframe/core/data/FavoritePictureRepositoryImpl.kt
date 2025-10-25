@@ -14,33 +14,40 @@ class FavoritePictureRepositoryImpl (
     private val mapper: PictureEntityMapper
 ) : PictureRepository {
 
+    // добавляет в бд
     override suspend fun addToFavorites(picture: Picture) {
         dao.insert(mapper.toEntity(picture))
     }
-
-    override fun getAllPictures(): Flow<List<Picture>> {
+    // Загружает все избранные картинки, Flow позволяет наблюдать за
+    //  изменениями в реальном времени  при обновлении бд
+    override fun loadFavoritePictures(): Flow<List<Picture>> {
         return dao.getAllPictures().map { list ->
+            // Преобразует каждый entity в Picture
             list.map { mapper.fromEntity(it) }
         }
     }
-
+    // Получает картинку по ID: если найдена в базе
     override suspend fun getPictureById(id: Int): Picture? {
         return dao.getPictureById(id)?.let { mapper.fromEntity(it) }
     }
-
+    // Сначала получает картинку, затем удаляет из бд
+    // Если не найдена, бросаем исключение
     override suspend fun deletePictureById(id: Int): Picture {
         val picture = getPictureById(id)
-        dao.deletePictureById(id)
+        dao.deletePictureById(id) // Удаление из бд
         return picture ?: throw IllegalArgumentException("Picture not found")
     }
 
     override suspend fun deleteAllPictures(): Flow<List<Picture>> {
-        val pictures = getAllPictures().first()
+        // Получаем текущий список
+        val pictures = loadFavoritePictures().first()
+        // Удаляем все записи из базы
         dao.deleteAllPictures()
         return flow { emit(pictures) }
     }
 
-    override suspend fun updatePictures(picture: Picture) {
-        dao.updatePictures(mapper.toEntity(picture))
+    override suspend fun updatePictures(pictures: List<Picture>) {
+        val entities = pictures.map { mapper.toEntity(it) }
+        dao.updatePictures(entities)
     }
 }

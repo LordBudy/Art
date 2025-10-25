@@ -1,6 +1,5 @@
 package com.example.artphotoframe.core.presentation.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,19 +11,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomEnd
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
-
 
 @Composable
-fun FavoritesButton(
+fun HomeButton(
     onClick: () -> Unit,
     color: Color = MaterialTheme.colorScheme.onBackground,
     modifier: Modifier
@@ -43,7 +38,7 @@ fun FavoritesButton(
 
         ){
             Text(
-                text = "⭐ Избранное",
+                text = "Домой⭐",
                 color = color,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier
@@ -52,23 +47,5 @@ fun FavoritesButton(
             )
         }
 
-    }
-}
-@PreviewLightDark
-@Composable
-fun PreviewFavoritesButton() {
-
-    ArtPhotoFrameTheme {
-        Box(
-
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-        ) {
-            FavoritesButton(onClick = {},
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-            )
-        }
     }
 }

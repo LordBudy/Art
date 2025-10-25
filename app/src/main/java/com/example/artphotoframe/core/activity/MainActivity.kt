@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.artphotoframe.core.presentation.screens.FavoriteScreen
 import com.example.artphotoframe.core.presentation.screens.PictureScreen
 import com.example.artphotoframe.core.presentation.screens.SearchScreen
 
@@ -27,8 +28,8 @@ class MainActivity : ComponentActivity() {
                     SearchScreen(
                         navController = navController
                     )
-                }
 
+                }
                 composable(
                     route = "picture_screen/{pictureId}",
                     arguments = listOf(
@@ -44,6 +45,11 @@ class MainActivity : ComponentActivity() {
                             navController
                         )
                     }
+                }
+                composable("favorite_screen"){
+                    FavoriteScreen(
+                        navController = navController
+                    )
                 }
             }
         }
