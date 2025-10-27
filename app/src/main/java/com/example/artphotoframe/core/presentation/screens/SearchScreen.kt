@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -22,15 +21,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.room.util.query
 import com.example.artphotoframe.core.presentation.ui.FastSearch
 import com.example.artphotoframe.core.presentation.ui.FavoritesButton
-import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
-import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,7 +54,6 @@ fun SearchScreen(
     // Состояние для текста поиска
     var searchText by remember { mutableStateOf("") }
 
-    ArtPhotoFrameTheme {
         Scaffold(
             floatingActionButton = {
                 FavoritesButton(
@@ -119,7 +113,7 @@ fun SearchScreen(
                 }
             }
         )
-    }
+
 }
 
 //@PreviewLightDark

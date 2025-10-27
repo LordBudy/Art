@@ -40,95 +40,95 @@ fun FullPictureInfo(
     modifier: Modifier = Modifier
 ) {
 
-    ArtPhotoFrameTheme {
-        Scaffold(
-            modifier = modifier,
-            floatingActionButton = {
-                FavoritesButton(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    //переход в избранное
-                    onClick = { navController.navigate("favorite_screen") },
-                    modifier = Modifier
-                )
-            },
-            content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        //автоматически добавляет(padding) под системные панели
-                        .padding(innerPadding)
-                ) {
-                    Row {
-                        BackButton(
-                            onClick = { navController.popBackStack() },
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        // Заголовок
-                        Text(
-                            text = picture.title ?: "Нет заголовка",
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier
-                                .padding(15.dp)
-                        )
-                    }
 
-                    // Изображение
-                    FullPictureFavorite(
-                        picture = picture,
-                        onClick = {
-                            navController.navigate("picture_screen/${picture.id}")
-                        },
-                        isFavorite = isFavorite,
-                        onAddToFavorites = onAddToFavorites,
-                        onRemoveFromFavorites = onRemoveFromFavorites,
-                        onUpdateFavorites = onUpdateFavorites
+    Scaffold(
+        modifier = modifier,
+        floatingActionButton = {
+            FavoritesButton(
+                color = MaterialTheme.colorScheme.onBackground,
+                //переход в избранное
+                onClick = { navController.navigate("favorite_screen") },
+                modifier = Modifier
+            )
+        },
+        content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.background)
+                    //автоматически добавляет(padding) под системные панели
+                    .padding(innerPadding)
+            ) {
+                Row {
+                    BackButton(
+                        onClick = { navController.popBackStack() },
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-
-
-                    // Описание
+                    // Заголовок
                     Text(
-                        // Обработка null
-                        text = picture.description ?: "Нет описания",
-                        fontSize = 16.sp,
+                        text = picture.title ?: "Нет заголовка",
+                        fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
-                            .fillMaxWidth()
                             .padding(15.dp)
-                            .wrapContentHeight(unbounded = true)
-
                     )
                 }
+
+                // Изображение
+                FullPictureFavorite(
+                    picture = picture,
+                    onClick = {
+                        navController.navigate("picture_screen/${picture.id}")
+                    },
+                    isFavorite = isFavorite,
+                    onAddToFavorites = onAddToFavorites,
+                    onRemoveFromFavorites = onRemoveFromFavorites,
+                    onUpdateFavorites = onUpdateFavorites
+                )
+
+
+                // Описание
+                Text(
+                    // Обработка null
+                    text = picture.description ?: "Нет описания",
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .wrapContentHeight(unbounded = true)
+
+                )
             }
-        )
-    }
+        }
+    )
+
 }
 
-@PreviewLightDark
-@Composable
-fun PreviewFullPictureInfo() {
-    val pic = Picture(
-        id = 1,
-        title = "Die Malkunst",
-        previewURL = "",
-        highQualityURL = "",
-        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
-    )
-    ArtPhotoFrameTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
-        ) {
-            FullPictureInfo(
-                picture = pic,
-                isFavorite = false,
-                onAddToFavorites = {},
-                onRemoveFromFavorites = {},
-                onUpdateFavorites = {},
-                modifier = Modifier,
-                navController = rememberNavController()
-            )
-        }
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun PreviewFullPictureInfo() {
+//    val pic = Picture(
+//        id = 1,
+//        title = "Die Malkunst",
+//        previewURL = "",
+//        highQualityURL = "",
+//        description = "Daten nach Texteingabe migriert, Beschriftung: Signatur"
+//    )
+//    ArtPhotoFrameTheme {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = Color.White)
+//        ) {
+//            FullPictureInfo(
+//                picture = pic,
+//                isFavorite = false,
+//                onAddToFavorites = {},
+//                onRemoveFromFavorites = {},
+//                onUpdateFavorites = {},
+//                modifier = Modifier,
+//                navController = rememberNavController()
+//            )
+//        }
+//    }
+//}

@@ -20,10 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.artphotoframe.core.presentation.ui.FavoritesButton
 import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
 import com.example.artphotoframe.core.presentation.ui.HomeButton
-import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -53,59 +51,58 @@ fun FavoriteScreen(
         viewModel.loadFavoritePictures()
     }
 
-    ArtPhotoFrameTheme {
-        Scaffold(
-            floatingActionButton = {
-                HomeButton(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    //переход в избранное
-                    onClick = { navController.navigate("search_screen") },
-                    modifier = Modifier
-                )
-            },
-            content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = MaterialTheme.colorScheme.background)
-                        //автоматически добавляет(padding) под системные панели
-                        .padding(innerPadding)
-                ) {
+    Scaffold(
+        floatingActionButton = {
+            HomeButton(
+                color = MaterialTheme.colorScheme.onBackground,
+                //переход в избранное
+                onClick = { navController.navigate("search_screen") },
+                modifier = Modifier
+            )
+        },
+        content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.background)
+                    //автоматически добавляет(padding) под системные панели
+                    .padding(innerPadding)
+            ) {
 
 
-                    if (pictures.isEmpty()) {
-                        // Обработка пустого списка
-                        Text(
-                            text = "Нет избранных картинок 😔",
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    } else {
-                        // Отображение результатов поиска
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(
-                                items = uniquePictures,
-                                key = { picture -> picture.id }
-                            ) { picture ->  // ← Теперь передаём pictures и key для стабильности!
-                                FullPictureFavorite(
-                                    picture = picture,
-                                    onClick = {},
-                                    isFavorite = true,
-                                    onAddToFavorites = {},
-                                    onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
-                                    onUpdateFavorites = viewModel.onUpdateFavorites
-                                )
-                                HorizontalDivider() // Разделитель между изображениями
-                            }
+                if (pictures.isEmpty()) {
+                    // Обработка пустого списка
+                    Text(
+                        text = "Нет избранных картинок 😔",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else {
+                    // Отображение результатов поиска
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(
+                            items = uniquePictures,
+                            key = { picture -> picture.id }
+                        ) { picture ->  // ← Теперь передаём pictures и key для стабильности!
+                            FullPictureFavorite(
+                                picture = picture,
+                                onClick = {},
+                                isFavorite = true,
+                                onAddToFavorites = {},
+                                onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
+                                onUpdateFavorites = viewModel.onUpdateFavorites
+                            )
+                            HorizontalDivider() // Разделитель между изображениями
                         }
                     }
                 }
-
-
             }
-        )
-    }
+
+
+        }
+    )
+
 }

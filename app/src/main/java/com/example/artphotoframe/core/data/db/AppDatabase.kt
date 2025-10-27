@@ -22,6 +22,8 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "pictures_database"
                 )
+                    //пересоздаст таблици с потерей всех данных без миграции
+                   // .fallbackToDestructiveMigration(false)
                     .build()
                 INSTANCE = instance
                 instance

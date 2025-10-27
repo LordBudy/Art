@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.artphotoframe.core.presentation.ui.FullPictureInfo
-import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -41,7 +40,6 @@ fun PictureScreen(
         mutableStateOf(picture) }
 
     if (cachedPicture != null) {
-        ArtPhotoFrameTheme {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -56,7 +54,7 @@ fun PictureScreen(
                     onUpdateFavorites = viewModel.onUpdateFavorites
                 )
             }
-        }
+
     } else {
         // если картинка не найдена
         Text("Картинка не найдена !",

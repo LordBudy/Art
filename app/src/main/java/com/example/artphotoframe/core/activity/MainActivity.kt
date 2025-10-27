@@ -12,44 +12,47 @@ import androidx.navigation.navArgument
 import com.example.artphotoframe.core.presentation.screens.FavoriteScreen
 import com.example.artphotoframe.core.presentation.screens.PictureScreen
 import com.example.artphotoframe.core.presentation.screens.SearchScreen
+import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
+            ArtPhotoFrameTheme {
+                val navController = rememberNavController()
 
-            NavHost(
-                navController = navController,
-                startDestination = "search_screen"
-            ) {
-                composable("search_screen") {
-                    SearchScreen(
-                        navController = navController
-                    )
+                NavHost(
+                    navController = navController,
+                    startDestination = "search_screen"
+                ) {
+                    composable("search_screen") {
+                        SearchScreen(
+                            navController = navController
+                        )
 
-                }
-                composable(
-                    route = "picture_screen/{pictureId}",
-                    arguments = listOf(
-                        navArgument("pictureId") {
-                            type = NavType.IntType
+                    }
+                    composable(
+                        route = "picture_screen/{pictureId}",
+                        arguments = listOf(
+                            navArgument("pictureId") {
+                                type = NavType.IntType
+                            }
+                        )
+                    ) { backStackEntry ->
+                        val pictureId = backStackEntry.arguments?.getInt("pictureId")
+                        pictureId?.let { id ->
+                            PictureScreen(
+                                pictureId = id,
+                                navController
+                            )
                         }
-                    )
-                ) { backStackEntry ->
-                    val pictureId = backStackEntry.arguments?.getInt("pictureId")
-                    pictureId?.let { id ->
-                        PictureScreen(
-                            pictureId = id,
-                            navController
+                    }
+                    composable("favorite_screen") {
+                        FavoriteScreen(
+                            navController = navController
                         )
                     }
-                }
-                composable("favorite_screen"){
-                    FavoriteScreen(
-                        navController = navController
-                    )
                 }
             }
         }
