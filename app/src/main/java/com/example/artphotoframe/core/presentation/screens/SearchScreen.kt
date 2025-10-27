@@ -55,14 +55,6 @@ fun SearchScreen(
     var searchText by remember { mutableStateOf("") }
 
         Scaffold(
-            floatingActionButton = {
-                FavoritesButton(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    //переход в избранное
-                    onClick = { navController.navigate("favorite_screen") },
-                    modifier = Modifier
-                )
-            },
             content = { innerPadding ->
                 Column(
                     modifier = Modifier

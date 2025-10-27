@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.artphotoframe.core.data.db.model.PictureEntity
 
 
-@Database(entities = [PictureEntity::class], version = 1, exportSchema = false)
+@Database(entities = [PictureEntity::class], version = 1, exportSchema = true)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun pictureDao(): PictureDao
