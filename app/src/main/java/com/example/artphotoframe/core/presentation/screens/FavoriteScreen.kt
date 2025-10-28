@@ -52,14 +52,6 @@ fun FavoriteScreen(
     }
 
     Scaffold(
-        floatingActionButton = {
-            HomeButton(
-                color = MaterialTheme.colorScheme.onBackground,
-                //переход в избранное
-                onClick = { navController.navigate("search_screen") },
-                modifier = Modifier
-            )
-        },
         content = { innerPadding ->
             Column(
                 modifier = Modifier

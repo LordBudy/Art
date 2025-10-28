@@ -1,29 +1,20 @@
 package com.example.artphotoframe.core.presentation.ui
 
-import FullPicture
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.artphotoframe.core.data.models.Picture
-import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
 fun FullPictureInfo(
@@ -43,14 +34,6 @@ fun FullPictureInfo(
 
     Scaffold(
         modifier = modifier,
-        floatingActionButton = {
-            FavoritesButton(
-                color = MaterialTheme.colorScheme.onBackground,
-                //переход в избранное
-                onClick = { navController.navigate("favorite_screen") },
-                modifier = Modifier
-            )
-        },
         content = { innerPadding ->
             Column(
                 modifier = Modifier
