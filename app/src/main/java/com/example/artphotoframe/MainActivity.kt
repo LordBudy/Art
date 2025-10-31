@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ArtPhotoFrameTheme {
                 val navController = rememberNavController()
+                val snackbarHostState = remember { SnackbarHostState() }
 
                 Scaffold(
                     bottomBar = {
@@ -74,7 +77,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("favorite_screen") {
-                            FavoriteScreen(navController)
+                            FavoriteScreen(navController,snackbarHostState)
                         }
 
 

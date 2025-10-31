@@ -31,7 +31,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavoriteScreen(
-    navController: NavController
+    navController: NavController,
+    snackbarHostState: SnackbarHostState
 ) {
     val viewModel: FullPicFavoriteViewModel = koinViewModel()
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
@@ -40,7 +41,7 @@ fun FavoriteScreen(
         emptyList()
     )
     //  Состояние снекбара
-    val snackbarHostState = remember { SnackbarHostState() }
+
     val wallpaperUi by wallpaperViewModel.ui.collectAsStateWithLifecycle()
 
     // Фильтруем дубликаты по ID если есть такие то удаляются
@@ -66,68 +67,63 @@ fun FavoriteScreen(
         wallpaperViewModel.clearMessage()
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.background)
-                    //автоматически добавляет(padding) под системные панели
-                    .padding(innerPadding)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+        //автоматически добавляет(padding) под системные панели
+
+    ) {
+
+
+        if (pictures.isEmpty()) {
+            // Обработка пустого списка
+            Text(
+                text = "Нет избранных картинок 😔",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        } else {
+            // Отображение результатов поиска
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                items(
+                    items = uniquePictures,
+                    key = { picture -> picture.id }
+                ) { picture ->
+                    FullPictureFavorite(
+                        picture = picture,
+                        onClick = {},
+                        isFavorite = true,
+                        onAddToFavorites = {},
+                        onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
+                        onUpdateFavorites = viewModel.onUpdateFavorites,
+                        menu = {
+                            FavoriteItemMenu { target ->
+                                // Берём полноразмерное изображение, если нет — превью
+                                val dataForWallpaper =
+                                    picture.highQualityURL ?: picture.previewURL ?: ""
 
-
-                if (pictures.isEmpty()) {
-                    // Обработка пустого списка
-                    Text(
-                        text = "Нет избранных картинок 😔",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                } else {
-                    // Отображение результатов поиска
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(
-                            items = uniquePictures,
-                            key = { picture -> picture.id }
-                        ) { picture ->
-                            FullPictureFavorite(
-                                picture = picture,
-                                onClick = {},
-                                isFavorite = true,
-                                onAddToFavorites = {},
-                                onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
-                                onUpdateFavorites = viewModel.onUpdateFavorites,
-                                menu = {
-                                    FavoriteItemMenu { target ->
-                                        // Берём полноразмерное изображение, если нет — превью
-                                        val dataForWallpaper =
-                                            picture.highQualityURL ?: picture.previewURL ?: ""
-
-                                        // Если строка не пустая — ставим обои
-                                        if (dataForWallpaper.isNotBlank()) {
-                                            wallpaperViewModel.apply(dataForWallpaper, target)
-                                        } else {
-                                            Log.w(
-                                                "FavoriteScreen",
-                                                "Нет ссылки на изображение для ID=${picture.id}"
-                                            )
-                                        }
-                                    }
+                                // Если строка не пустая — ставим обои
+                                if (dataForWallpaper.isNotBlank()) {
+                                    wallpaperViewModel.apply(dataForWallpaper, target)
+                                } else {
+                                    Log.w(
+                                        "FavoriteScreen",
+                                        "Нет ссылки на изображение для ID=${picture.id}"
+                                    )
                                 }
-                            )
-                            HorizontalDivider()
+                            }
                         }
-                    }
+                    )
+                    HorizontalDivider()
                 }
             }
-
-
         }
-    )
+    }
+
 
 }

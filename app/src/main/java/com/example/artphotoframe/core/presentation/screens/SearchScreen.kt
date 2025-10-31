@@ -54,59 +54,55 @@ fun SearchScreen(
     // Состояние для текста поиска
     var searchText by remember { mutableStateOf("") }
 
-        Scaffold(
-            content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        //автоматически добавляет(padding) под системные панели
-                        .padding(innerPadding)
-                ) {
 
-                    // Панель поиска
-                    FastSearch(
-                        text = searchText,
-                        onValueChange = { newText ->
-                            searchText = newText
-                        },
-                        onSearchClick = { query ->
-                            if (query.isBlank()) {
-                                Log.d("LaunchedEffect", "вызываем loadAllPictures")
-                                viewModel.loadAllPictures()
-                            } else {
-                                Log.d("LaunchedEffect", "вызываем searchPictures")
-                                viewModel.searchPictures(query)
-                            }
-                        },
-                        modifier =
-                            Modifier.padding(bottom = 8.dp)
-                    )
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.background)
+        //автоматически добавляет(padding) под системные панели
 
-                    // Отображение результатов поиска
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        items(
-                            pictures,
-                            key = { picture -> picture.id }
-                        ) { picture ->
-                            FullPicture(
-                                picture = picture,
-                                onClick = {
-                                    navController
-                                        .navigate("picture_screen/${picture.id}")
-                                }
-                            )
-                            HorizontalDivider() // Разделитель между изображениями
-                        }
-                    }
+    ) {
+        // Панель поиска
+        FastSearch(
+            text = searchText,
+            onValueChange = { newText ->
+                searchText = newText
+            },
+            onSearchClick = { query ->
+                if (query.isBlank()) {
+                    Log.d("LaunchedEffect", "вызываем loadAllPictures")
+                    viewModel.loadAllPictures()
+                } else {
+                    Log.d("LaunchedEffect", "вызываем searchPictures")
+                    viewModel.searchPictures(query)
                 }
-            }
+            },
+            modifier =
+                Modifier.padding(bottom = 8.dp)
         )
 
+        // Отображение результатов поиска
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(
+                pictures,
+                key = { picture -> picture.id }
+            ) { picture ->
+                FullPicture(
+                    picture = picture,
+                    onClick = {
+                        navController
+                            .navigate("picture_screen/${picture.id}")
+                    }
+                )
+                HorizontalDivider() // Разделитель между изображениями
+            }
+        }
+    }
 }
+
 
 //@PreviewLightDark
 //@Composable
