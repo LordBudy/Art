@@ -1,7 +1,6 @@
-package com.example.artphotoframe.core.data
+package com.example.artphotoframe.core.data.metropolitan
 
 import android.util.LruCache
-import com.example.artphotoframe.core.data.models.metropolitan.MetObject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,7 +19,8 @@ class MetRepository (
 
     suspend fun searchIds(query: String): List<Int> =
         withContext(io) {
-            api.search(q = query, hasImages = true).objectIDs.orEmpty() }
+            api.search(q = query, hasImages = true).objectIDs.orEmpty()
+        }
 
     suspend fun getObjectsBatched(ids: List<Int>):
             List<MetObject> = coroutineScope {

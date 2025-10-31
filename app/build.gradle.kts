@@ -40,6 +40,7 @@ android {
     }
 }
 
+
 dependencies {
     // Compose
     implementation(libs.androidx.compose.material.icons.extended)
@@ -48,10 +49,13 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Core
@@ -67,8 +71,6 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
 
     // Koin
-
-
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
 
@@ -78,7 +80,6 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.multidex)
     implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.compose.material.icons.extended)
 
-
+    // implementation(libs.androidx.compose.material.icons.extended)
 }

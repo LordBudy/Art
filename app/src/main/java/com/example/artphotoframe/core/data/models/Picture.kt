@@ -1,6 +1,6 @@
 package com.example.artphotoframe.core.data.models
 
-import com.example.artphotoframe.core.data.models.metropolitan.MetObject
+import com.example.artphotoframe.core.data.metropolitan.MetObject
 
 //Представляет конечную модель изображения
 //Содержит метод для преобразования данных из MetObject

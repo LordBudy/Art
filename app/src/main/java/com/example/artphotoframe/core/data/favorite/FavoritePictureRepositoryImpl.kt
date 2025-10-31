@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.data
+package com.example.artphotoframe.core.data.favorite
 
 import com.example.artphotoframe.core.data.db.PictureDao
 import com.example.artphotoframe.core.data.db.model.PictureEntityMapper

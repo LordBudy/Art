@@ -1,6 +1,5 @@
-package com.example.artphotoframe.core.data
+package com.example.artphotoframe.core.data.european
 
-import com.example.artphotoframe.core.data.models.european.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

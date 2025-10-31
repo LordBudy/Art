@@ -1,13 +1,16 @@
 package com.example.artphotoframe.core.di
 
 
-import com.example.artphotoframe.core.data.ApiService
-import com.example.artphotoframe.core.data.FavoritePictureRepositoryImpl
-import com.example.artphotoframe.core.data.MetApi
-import com.example.artphotoframe.core.data.MetRepository
-import com.example.artphotoframe.core.data.SearchPictureFullRepositoryImpl
+import com.example.artphotoframe.core.data.european.ApiService
+import com.example.artphotoframe.core.data.favorite.FavoritePictureRepositoryImpl
+import com.example.artphotoframe.core.data.metropolitan.MetApi
+import com.example.artphotoframe.core.data.metropolitan.MetRepository
+import com.example.artphotoframe.core.data.search.SearchPictureFullRepositoryImpl
 import com.example.artphotoframe.core.data.db.AppDatabase
 import com.example.artphotoframe.core.data.db.model.PictureEntityMapper
+import com.example.artphotoframe.core.data.wallpaper.WallpaperDataSource
+import com.example.artphotoframe.core.data.wallpaper.WallpaperDataSourceImpl
+import com.example.artphotoframe.core.data.wallpaper.WallpaperRepositoryImpl
 import com.example.artphotoframe.core.domain.favorites.AddToFavoritesUseCase
 import com.example.artphotoframe.core.domain.favorites.DeleteAllFavoritesUseCase
 import com.example.artphotoframe.core.domain.favorites.DeleteFavoriteUseCase
@@ -17,8 +20,11 @@ import com.example.artphotoframe.core.domain.favorites.PictureRepository
 import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
+import com.example.artphotoframe.core.domain.wallpaper.SetWallpaperUseCase
+import com.example.artphotoframe.core.domain.wallpaper.WallpaperRepository
 import com.example.artphotoframe.core.presentation.screens.FullPicFavoriteViewModel
 import com.example.artphotoframe.core.presentation.screens.SearchViewModel
+import com.example.artphotoframe.core.presentation.screens.WallpaperViewModel
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -46,13 +52,15 @@ val appModule = module {
     }
 
     single {
-        get<AppDatabase>().pictureDao() }
+        get<AppDatabase>().pictureDao()
+    }
 
     single {
-        PictureEntityMapper() }
+        PictureEntityMapper()
+    }
 
     // Репозиторий: реализация интерфейса Favorite
-    single <PictureRepository> {
+    single<PictureRepository> {
         FavoritePictureRepositoryImpl(
             get(),// PictureDao
             get()  // PictureEntityMapper
@@ -67,7 +75,7 @@ val appModule = module {
     single { DeleteAllFavoritesUseCase(get()) }
     single { UpdateFavoriteUseCase(get()) }
 
-    // Добавлено: FullPictureViewModel
+    //FullPictureViewModel
     viewModel {
         FullPicFavoriteViewModel(
             get(),
@@ -77,6 +85,14 @@ val appModule = module {
             get()
         )
     }
+    //Обои
+    // data source (Android/Coil/Bitmap)
+    single<WallpaperDataSource> { WallpaperDataSourceImpl(androidContext()) }
+    // domain repository ← реализуется через data source
+    single<WallpaperRepository> { WallpaperRepositoryImpl(get()) }
+
+    factory { SetWallpaperUseCase(get()) }
+    viewModel { WallpaperViewModel(get()) }
 
     single(EuropeanaRetrofit) {
         Retrofit.Builder()
@@ -85,8 +101,10 @@ val appModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    single { get<Retrofit>(EuropeanaRetrofit)
-        .create(ApiService::class.java) }
+    single {
+        get<Retrofit>(EuropeanaRetrofit)
+            .create(ApiService::class.java)
+    }
 
     single(MetRetrofit) {
         Retrofit.Builder()
@@ -104,7 +122,8 @@ val appModule = module {
 
     // UseCase
     single {
-        SearchPicturesUseCase(get()) }
+        SearchPicturesUseCase(get())
+    }
 
     // SearchViewModel
     viewModel { SearchViewModel(get()) }
