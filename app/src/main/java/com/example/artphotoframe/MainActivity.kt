@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 val snackbarHostState = remember { SnackbarHostState() }
 
                 Scaffold(
+                    snackbarHost = { androidx.compose.material3.SnackbarHost(hostState = snackbarHostState) },
                     bottomBar = {
                         val currentBackStack by navController.currentBackStackEntryAsState()
                         val currentRoute = currentBackStack?.destination?.route
