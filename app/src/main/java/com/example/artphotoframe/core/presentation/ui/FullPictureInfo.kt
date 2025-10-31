@@ -66,7 +66,7 @@ fun FullPictureInfo(
                     onAddToFavorites = onAddToFavorites,
                     onRemoveFromFavorites = onRemoveFromFavorites,
                     onUpdateFavorites = onUpdateFavorites,
-                    onWallpaperSet = {}
+                    menu = {}
                 )
 
 

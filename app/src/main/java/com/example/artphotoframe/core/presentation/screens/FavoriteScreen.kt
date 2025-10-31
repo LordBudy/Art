@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.artphotoframe.core.presentation.ui.FavoriteItemMenu
 import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
 import com.example.artphotoframe.core.presentation.ui.HomeButton
 import org.koin.androidx.compose.koinViewModel
@@ -38,7 +39,7 @@ fun FavoriteScreen(
     val pictures by viewModel.favorites.collectAsStateWithLifecycle(
         emptyList()
     )
-        //  Состояние снекбара
+    //  Состояние снекбара
     val snackbarHostState = remember { SnackbarHostState() }
     val wallpaperUi by wallpaperViewModel.ui.collectAsStateWithLifecycle()
 
@@ -101,15 +102,21 @@ fun FavoriteScreen(
                                 onAddToFavorites = {},
                                 onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
                                 onUpdateFavorites = viewModel.onUpdateFavorites,
-                                onWallpaperSet = { target ->
-                                    // Берём полноразмерное изображение, если нет — превью
-                                    val dataForWallpaper = picture.highQualityURL ?: picture.previewURL ?: ""
+                                menu = {
+                                    FavoriteItemMenu { target ->
+                                        // Берём полноразмерное изображение, если нет — превью
+                                        val dataForWallpaper =
+                                            picture.highQualityURL ?: picture.previewURL ?: ""
 
-                                    // Если строка не пустая — ставим обои
-                                    if (dataForWallpaper.isNotBlank()) {
-                                        wallpaperViewModel.apply(dataForWallpaper, target)
-                                    } else {
-                                        Log.w("FavoriteScreen", "Нет ссылки на изображение для ID=${picture.id}")
+                                        // Если строка не пустая — ставим обои
+                                        if (dataForWallpaper.isNotBlank()) {
+                                            wallpaperViewModel.apply(dataForWallpaper, target)
+                                        } else {
+                                            Log.w(
+                                                "FavoriteScreen",
+                                                "Нет ссылки на изображение для ID=${picture.id}"
+                                            )
+                                        }
                                     }
                                 }
                             )

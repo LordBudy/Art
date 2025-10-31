@@ -32,7 +32,7 @@ fun FullPictureFavorite(
     onAddToFavorites: (Picture) -> Unit,
     onRemoveFromFavorites: (Picture) -> Unit,
     onUpdateFavorites: (Picture) -> Unit,
-    onWallpaperSet: (WallpaperTarget) -> Unit
+    menu: (@Composable () -> Unit)? = null
 ) {
     Box {
         val imageUrl = picture.previewURL
@@ -75,10 +75,16 @@ fun FullPictureFavorite(
             onAddToFavorites = onAddToFavorites,
             onRemoveFromFavorites = onRemoveFromFavorites,
             onUpdateFavorites = onUpdateFavorites,
-            modifier = Modifier.align(Alignment.TopEnd)  // Позиционирование в правом верхнем углу
+            modifier = Modifier.align(Alignment.TopStart)  // Позиционирование в правом верхнем углу
         )
-        FavoriteItemMenu { target ->
-            onWallpaperSet(target)
+        // ⋮ Меню — рисуем только если передали слот
+        if (menu != null) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+            ) {
+                menu()
+            }
         }
     }
 }
@@ -106,7 +112,7 @@ fun FullPictureFavorite() {
                 onAddToFavorites = {},
                 onRemoveFromFavorites = {},
                 onUpdateFavorites = {},
-                onWallpaperSet = {}
+                menu = {FavoriteItemMenu {  }}
             )
         }
     }
