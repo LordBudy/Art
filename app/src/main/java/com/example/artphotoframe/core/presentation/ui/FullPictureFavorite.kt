@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.artphotoframe.R
 import com.example.artphotoframe.core.data.models.Picture
+import com.example.artphotoframe.core.domain.wallpaper.WallpaperTarget
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 
 @Composable
@@ -30,7 +31,8 @@ fun FullPictureFavorite(
     isFavorite: Boolean,
     onAddToFavorites: (Picture) -> Unit,
     onRemoveFromFavorites: (Picture) -> Unit,
-    onUpdateFavorites: (Picture) -> Unit
+    onUpdateFavorites: (Picture) -> Unit,
+    onWallpaperSet: (WallpaperTarget) -> Unit
 ) {
     Box {
         val imageUrl = picture.previewURL
@@ -75,6 +77,9 @@ fun FullPictureFavorite(
             onUpdateFavorites = onUpdateFavorites,
             modifier = Modifier.align(Alignment.TopEnd)  // Позиционирование в правом верхнем углу
         )
+        FavoriteItemMenu { target ->
+            onWallpaperSet(target)
+        }
     }
 }
 
@@ -100,7 +105,8 @@ fun FullPictureFavorite() {
                 isFavorite = false,
                 onAddToFavorites = {},
                 onRemoveFromFavorites = {},
-                onUpdateFavorites = {}
+                onUpdateFavorites = {},
+                onWallpaperSet = {}
             )
         }
     }

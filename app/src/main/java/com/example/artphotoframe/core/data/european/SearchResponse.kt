@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.data.models.european
+package com.example.artphotoframe.core.data.european
 
 //Контейнер для ответа от API
 //Содержит список найденных элементов

@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.data.models.metropolitan
+package com.example.artphotoframe.core.data.metropolitan
 
 import com.example.artphotoframe.core.data.models.Picture
 

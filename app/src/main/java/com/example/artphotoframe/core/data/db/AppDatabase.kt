@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.artphotoframe.core.data.db.model.PictureEntity
 
 
-@Database(entities = [PictureEntity::class], version = 1, exportSchema = true)
+@Database(entities = [PictureEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun pictureDao(): PictureDao
@@ -22,8 +22,6 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "pictures_database"
                 )
-                    //пересоздаст таблици с потерей всех данных без миграции
-                   // .fallbackToDestructiveMigration(false)
                     .build()
                 INSTANCE = instance
                 instance

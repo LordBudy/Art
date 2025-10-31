@@ -1,7 +1,5 @@
-package com.example.artphotoframe.core.data
+package com.example.artphotoframe.core.data.metropolitan
 
-import com.example.artphotoframe.core.data.models.metropolitan.MetObject
-import com.example.artphotoframe.core.data.models.metropolitan.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

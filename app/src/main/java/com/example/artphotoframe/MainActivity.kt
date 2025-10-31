@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.activity
+package com.example.artphotoframe
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = "search_screen",
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier.Companion.padding(padding)
                     ) {
                         composable("search_screen") {
                             SearchScreen(navController)
@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "picture_screen/{pictureId}",
                             arguments = listOf(
-                                navArgument("pictureId") { type = NavType.IntType }
+                                navArgument("pictureId") { type = NavType.Companion.IntType }
                             )
                         ) { backStackEntry ->
                             val id = backStackEntry.arguments?.getInt("pictureId")
