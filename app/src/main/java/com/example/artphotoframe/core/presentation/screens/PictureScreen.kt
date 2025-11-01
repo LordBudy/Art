@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.artphotoframe.core.presentation.ui.FullPictureInfo
 import org.koin.androidx.compose.koinViewModel
@@ -32,21 +33,19 @@ fun PictureScreen(
         viewModel.loadPictureById(pictureId)
     }
     // Собираем состояние текущей картинки
-    val picture by viewModel.currentPicture.collectAsState()
-    val isFavorite by viewModel.isFavorite.collectAsState()
+    val picture = viewModel.currentPicture.collectAsStateWithLifecycle().value
+    val isFavorite = viewModel.isFavorite.collectAsStateWithLifecycle().value
 
-    // remember для кэширования состояния
-    val cachedPicture by remember(picture) {
-        mutableStateOf(picture) }
 
-    if (cachedPicture != null) {
+
+    if (picture != null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = MaterialTheme.colorScheme.background)
             ) {
                 FullPictureInfo(
-                    picture = cachedPicture!!,//можно безопасно использовать !!
+                    picture = picture,
                     navController = navController,
                     isFavorite = isFavorite,
                     onAddToFavorites = viewModel.onAddToFavorites,

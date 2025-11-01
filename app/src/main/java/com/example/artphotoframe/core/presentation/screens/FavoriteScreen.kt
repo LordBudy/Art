@@ -96,7 +96,7 @@ fun FavoriteScreen(
                 ) { picture ->
                     FullPictureFavorite(
                         picture = picture,
-                        onClick = {},
+                        onImageClick = {},
                         isFavorite = true,
                         onAddToFavorites = {},
                         onRemoveFromFavorites = viewModel.onRemoveFromFavorites,

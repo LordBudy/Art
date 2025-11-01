@@ -54,9 +54,7 @@ fun FullPictureInfo(
         // Изображение
         FullPictureFavorite(
             picture = picture,
-            onClick = {
-                navController.navigate("picture_screen/${picture.id}")
-            },
+            onImageClick = null,
             isFavorite = isFavorite,
             onAddToFavorites = onAddToFavorites,
             onRemoveFromFavorites = onRemoveFromFavorites,
