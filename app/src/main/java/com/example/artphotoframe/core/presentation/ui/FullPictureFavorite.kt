@@ -27,7 +27,6 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 @Composable
 fun FullPictureFavorite(
     picture: Picture,
-    // было onClick: () -> Unit, стало необязательным
     onImageClick: (() -> Unit)? = null,
     isFavorite: Boolean,
     onAddToFavorites: (Picture) -> Unit,
