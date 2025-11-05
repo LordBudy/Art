@@ -54,11 +54,7 @@ fun FavoriteScreen(
             Log.w("FavoriteScreen", "Duplicates removed: ${pictures.size - uniquePictures.size}")
         }
     }
-    // Загрузка картинок из БД при входе на экран
-    LaunchedEffect(Unit) {
-        //функция в ViewModel для загрузки из БД
-        viewModel.loadFavoritePictures()
-    }
+
 
     //пришло сообщение от WallpaperViewModel->показ. снекбар->удаляем сообщение
     LaunchedEffect(wallpaperUi.message) {
@@ -96,7 +92,10 @@ fun FavoriteScreen(
                 ) { picture ->
                     FullPictureFavorite(
                         picture = picture,
-                        onImageClick = {},
+                        // переход к экрану PictureScreen, передаём ID картинки
+                        onImageClick = {
+                            navController.navigate("picture_screen/${picture.id}")
+                                       },
                         isFavorite = true,
                         onAddToFavorites = {},
                         onRemoveFromFavorites = viewModel.onRemoveFromFavorites,

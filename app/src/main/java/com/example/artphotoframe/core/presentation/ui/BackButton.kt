@@ -12,7 +12,8 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun BackButton(
     onClick: () -> Unit,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    modifier: Modifier = Modifier
 ){
 
     IconButton(

@@ -10,8 +10,12 @@ import com.example.artphotoframe.core.domain.favorites.PictureRepository
 import com.example.artphotoframe.core.domain.favorites.UpdateFavoriteUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class FullPicFavoriteViewModel(
@@ -22,79 +26,64 @@ class FullPicFavoriteViewModel(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
-    // Состояние для хранения избранных картинок
-    private val _favorites = MutableStateFlow<List<Picture>>(emptyList())
-    val favorites: StateFlow<List<Picture>> = _favorites.asStateFlow()
-
     // Состояние для текущей картинки
     private val _currentPicture = MutableStateFlow<Picture?>(null)
-    val currentPicture: StateFlow<Picture?> = _currentPicture
+    val currentPicture: StateFlow<Picture?> =  _currentPicture.asStateFlow()
 
-    // Состояние для isFavorite
-    private val _isFavorite = MutableStateFlow(false)
-    val isFavorite: StateFlow<Boolean> = _isFavorite
+    val favorites: StateFlow<List<Picture>> =
+        pictureRepository
+            .loadFavoritePictures()              // Должен вернуть Flow<List<Picture>>
+            .onEach { Log.d("FullPicVM", "favorites size=${it.size}") }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList()
+            )
 
-    // Новый метод для загрузки избранных картинок из БД
-    fun loadFavoritePictures() {
-        viewModelScope.launch {
-            pictureRepository.loadFavoritePictures().collect { pictures ->
-                _favorites.value = pictures
-                Log.d(
-                    "FullPicFavoriteViewModel",
-                    "Loaded favorites: ${pictures.size} pictures"
-                )
-            }
-        }
-    }
+    val isFavorite: StateFlow<Boolean> =
+        combine(currentPicture, favorites) { pic, favs ->
+            pic != null && favs.any { it.id == pic.id }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
-    // Получение картинки по ID
     fun loadPictureById(id: Int) {
         viewModelScope.launch {
             try {
-                // Сначала пытаемся загрузить из API
-                var picture = searchRepository.getPictureById(id)
-                if (picture == null) {
-                    // Если не найдено в API, пробуем локальную БД (для favorites)
-                    picture = pictureRepository.getPictureById(id)
-                }
+                // Сначала пробуем API
+                val fromApi = searchRepository.getPictureById(id)
+                // Если не нашли — смотрим локальную БД (например, favorites)
+                val picture = fromApi ?: pictureRepository.getPictureById(id)
                 _currentPicture.value = picture
                 Log.d("FullPicFavoriteViewModel", "Loaded picture: $picture")
-                _isFavorite.value = picture?.let { isFavorite(it) } ?: false
             } catch (e: Exception) {
                 Log.e("FullPicFavoriteViewModel", "Error loading picture: ${e.message}")
             }
         }
     }
 
-    // является ли картинка избранной
-    fun isFavorite(picture: Picture): Boolean {
-        return favorites.value.any { it.id == picture.id }
-    }
-
+    fun isFavoriteSync(picture: Picture): Boolean =
+        favorites.value.any { it.id == picture.id }
 
     val onAddToFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             addToFavoritesUseCase.invoke(picture)
 
-            // После добавления обновляем список favorites
-            loadFavoritePictures()
         }
     }
 
     val onRemoveFromFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             deleteFavoriteUseCase.invoke(picture.id)
-
-            // После удаления обновляем список favorites
-            loadFavoritePictures()
         }
     }
 
     val onUpdateFavorites: (Picture) -> Unit = {picture ->
         viewModelScope.launch {
             updateFavoriteUseCase.invoke(listOf(picture))
-            // После обновления перезагружаем список из бд
-            loadFavoritePictures()
+
         }
     }
 
