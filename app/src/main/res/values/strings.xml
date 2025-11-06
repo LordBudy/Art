@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Art Photo Frame</string>
+    <string name="app_name" translatable="false">Art Photo Frame</string>
 
     <!-- FavoriteItemMenu -->
     <string name="menu_title">Menu</string>
@@ -24,6 +24,5 @@
     <string name="wallpaper_permission_denied">No permission to set wallpaper 😡</string>
     <string name="wallpaper_error">Failed to set wallpaper 😒</string>
 
-    <!-- Logs/warnings -->
-    <string name="no_image_url_warning">No image URL for ID=%1$d</string>
+
 </resources>
