@@ -34,18 +34,23 @@ fun FavoriteScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState
 ) {
+    // ViewModel избранного
     val viewModel: FullPicFavoriteViewModel = koinViewModel()
+
+    // ViewModel для установки обоев
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
 
+    // Список избранных картинок
     val pictures by viewModel.favorites.collectAsStateWithLifecycle(
         emptyList()
     )
-    //  Состояние снекбара
-
+    // UI состояние установки обоев (для снекбара)
     val wallpaperUi by wallpaperViewModel.ui.collectAsStateWithLifecycle()
 
     // Фильтруем дубликаты по ID если есть такие то удаляются
     val uniquePictures = pictures.distinctBy { it.id }
+
+    // Логируем для проверки
     //запускается каждый раз, когда uniquePictures меняется
     LaunchedEffect(uniquePictures) {
         Log.d("FavoriteScreen", "Pictures IDs: ${uniquePictures.map { it.id }}")
@@ -55,15 +60,14 @@ fun FavoriteScreen(
         }
     }
 
-
-    //пришло сообщение от WallpaperViewModel->показ. снекбар->удаляем сообщение
+    // Показ сообщения после установки обоев
     LaunchedEffect(wallpaperUi.message) {
         val msg = wallpaperUi.message ?: return@LaunchedEffect
         snackbarHostState.showSnackbar(message = msg)
         wallpaperViewModel.clearMessage()
     }
 
-
+    // Основная колонка
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,8 +75,7 @@ fun FavoriteScreen(
         //автоматически добавляет(padding) под системные панели
 
     ) {
-
-
+        // Если нет избранных — выводим текст
         if (pictures.isEmpty()) {
             // Обработка пустого списка
             Text(
@@ -81,19 +84,20 @@ fun FavoriteScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
-            // Отображение результатов поиска
+            // Отображение результатов поиска список избранных
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(
                     items = uniquePictures,
-                    key = { picture -> picture.id }
+                    key = { it.id }
                 ) { picture ->
+                    // Элемент избранного
                     FullPictureFavorite(
                         picture = picture,
-                        // переход к экрану PictureScreen, передаём ID картинки
                         onImageClick = {
+                            // Переход на полный просмотр
                             navController.navigate("picture_screen/${picture.id}")
                                        },
                         isFavorite = true,
@@ -101,8 +105,9 @@ fun FavoriteScreen(
                         onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
                         onUpdateFavorites = viewModel.onUpdateFavorites,
                         menu = {
+                            // Меню установки обоев
                             FavoriteItemMenu { target ->
-                                // Берём полноразмерное изображение, если нет — превью
+                                // Берём полноразмерное изображение, если нет то превью
                                 val dataForWallpaper =
                                     picture.highQualityURL ?: picture.previewURL ?: ""
 
@@ -110,9 +115,7 @@ fun FavoriteScreen(
                                 if (dataForWallpaper.isNotBlank()) {
                                     wallpaperViewModel.apply(dataForWallpaper, target)
                                 } else {
-                                    Log.w(
-                                        "FavoriteScreen",
-                                        "Нет ссылки на изображение для ID=${picture.id}"
+                                    Log.w("FavoriteScreen", "Нет ссылки на изображение для ID=${picture.id}"
                                     )
                                 }
                             }

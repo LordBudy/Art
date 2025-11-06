@@ -29,7 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.artphotoframe.R
 import com.example.artphotoframe.core.presentation.ui.BackButton
@@ -50,20 +49,22 @@ fun PictureScreen(
     // Загружаем картинку при создании экрана
     LaunchedEffect(pictureId) { viewModel.loadPictureById(pictureId) }
 
-    // Собираем состояние текущей картинки
+    // Текущее изображение и статус избранного
     val picture = viewModel.currentPicture.collectAsStateWithLifecycle().value
     val isFavorite = viewModel.isFavorite.collectAsStateWithLifecycle().value
-    val wallpaperUi = wallpaperVm.ui.collectAsStateWithLifecycle().value
 
-    // Локальный снекбар для сообщений из WallpaperViewModel
+    // Сообщения от WallpaperViewModel
+    val wallpaperUi = wallpaperVm.ui.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Показываем сообщение
     LaunchedEffect(wallpaperUi.message) {
         val msg = wallpaperUi.message ?: return@LaunchedEffect
         snackbarHostState.showSnackbar(msg)
         wallpaperVm.clearMessage()
     }
 
-    // Если картинка не нашлась — выходим
+    // Если картинка не найдена
     if (picture == null) {
         Text("Картинка не найдена")
         return
@@ -74,21 +75,23 @@ fun PictureScreen(
     var currentUrl by remember(picture) { mutableStateOf(hqUrl ?: previewUrl) } // стартуем с HQ, если есть
     var triedFallback by remember(picture) { mutableStateOf(false) }            // чтобы не зациклиться
 
-// ✅ Флаг загрузки для визуализации
+    // Показывать ли индикатор загрузки
     var isLoading by remember(currentUrl) { mutableStateOf(true) }
 
-    // Собираем ImageRequest вручную, чтобы перехватить onError и переключиться на preview
+    // Настройка загрузки картинки
     val context = LocalContext.current
     val imageRequest = remember(currentUrl) {
         ImageRequest.Builder(context)
             .data(currentUrl)
             .crossfade(true)
-            .allowHardware(false) // безопасно для получения Bitmap при необходимости
+            .allowHardware(false)
             .listener(
-                onStart = { isLoading = true },         // старт загрузки
-                onSuccess = { _, _ -> isLoading = false }, // успешно загрузили → прячем индикатор
+                // старт загрузки
+                onStart = { isLoading = true },
+                // успешно загрузили → прячем индикатор
+                onSuccess = { _, _ -> isLoading = false },
                 onError = { _, _ ->
-                    // если не пробовали фолбэк и есть preview — переключаемся на него
+                    // если HQ не загрузилось — используем превью
                     if (!triedFallback && hqUrl != null && previewUrl != null && currentUrl == hqUrl) {
                         triedFallback = true
                         currentUrl = previewUrl
@@ -103,19 +106,18 @@ fun PictureScreen(
 
     BottomSheetScaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        // нижняя шторка почти закрыта
         sheetPeekHeight = 28.dp,
         sheetDragHandle = {
-            BottomSheetDefaults.DragHandle() // стандартный M3-элемент
+            BottomSheetDefaults.DragHandle()
         },
-
         sheetContainerColor = MaterialTheme.colorScheme.surface,
-
-        // В sheetContent лежит уже сам текст: он появится только когда шторку потянут
         sheetContent = {
+            // Текст в нижней шторке
             Column(
                 modifier = Modifier
-                    .navigationBarsPadding() // чтобы не налезала на системные кнопки
-                    .padding(bottom = 12.dp) // чуть отступа, чтобы текст не упирался
+                    .navigationBarsPadding()
+                    .padding(bottom = 12.dp)
             ) {
                 Text(
                     text = picture.title ?: "Нет заголовка",
@@ -130,14 +132,13 @@ fun PictureScreen(
             }
         }
     ) { innerPadding ->
-        // ===== ГЛАВНЫЙ СЛОЙ: фото на весь экран + оверлеи =====
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // 📸 Полноэкранная картинка (с zoom/pan/double-tap внутри)
+            // Полноэкранная картинка
             ZoomableAsyncImage(
                 model = imageRequest,
                 contentDescription = "Full screen image",
@@ -146,7 +147,7 @@ fun PictureScreen(
                 error = painterResource(R.drawable.media),
                 modifier = Modifier.fillMaxSize()
             )
-            // 🔵 Индикатор загрузки поверх картинки, пока Coil грузит
+            //  Индикатор загрузки поверх картинки
             if (isLoading) {
                 Box(
                     modifier = Modifier
@@ -158,7 +159,7 @@ fun PictureScreen(
                 }
             }
 
-            // ← Назад + ❤ Избранное (левый верх)
+            //  Назад + Избранное
             Row(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -180,7 +181,7 @@ fun PictureScreen(
                 )
             }
 
-            // ⋮ Меню (правый верх) — установка обоев через WallpaperViewModel
+            // ⋮ Меню — установка обоев через WallpaperViewModel
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)

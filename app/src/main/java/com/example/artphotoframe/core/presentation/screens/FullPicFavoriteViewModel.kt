@@ -26,20 +26,21 @@ class FullPicFavoriteViewModel(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
-    // Состояние для текущей картинки
+    // Текущая открытая картинка на экране PictureScreen
     private val _currentPicture = MutableStateFlow<Picture?>(null)
     val currentPicture: StateFlow<Picture?> =  _currentPicture.asStateFlow()
 
+    // Подписка на список избранных из базы
     val favorites: StateFlow<List<Picture>> =
         pictureRepository
-            .loadFavoritePictures()              // Должен вернуть Flow<List<Picture>>
+            .loadFavoritePictures()  // БД отдаёт Flow<List<Picture>>
             .onEach { Log.d("FullPicVM", "favorites size=${it.size}") }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = emptyList()
             )
-
+    // isFavorite = true, если текущая картинка есть в списке избранных
     val isFavorite: StateFlow<Boolean> =
         combine(currentPicture, favorites) { pic, favs ->
             pic != null && favs.any { it.id == pic.id }
@@ -48,7 +49,7 @@ class FullPicFavoriteViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = false
         )
-
+    // Загружаем картинку по ID: сначала API → если нет — берём из БД
     fun loadPictureById(id: Int) {
         viewModelScope.launch {
             try {
@@ -63,20 +64,20 @@ class FullPicFavoriteViewModel(
             }
         }
     }
-
+    // Добавление в избранное
     val onAddToFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             addToFavoritesUseCase.invoke(picture)
 
         }
     }
-
+    // Удаление из избранного
     val onRemoveFromFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             deleteFavoriteUseCase.invoke(picture.id)
         }
     }
-
+    // Обновление записи в избранном
     val onUpdateFavorites: (Picture) -> Unit = {picture ->
         viewModelScope.launch {
             updateFavoriteUseCase.invoke(listOf(picture))
