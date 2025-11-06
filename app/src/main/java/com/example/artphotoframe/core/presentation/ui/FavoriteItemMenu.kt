@@ -6,9 +6,10 @@ import androidx.compose.material3.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.example.artphotoframe.core.domain.wallpaper.WallpaperTarget
 import com.example.artphotoframe.core.presentation.ui.theme.Orange
-
+import com.example.artphotoframe.R
 @Composable
 fun FavoriteItemMenu(
     onAction: (WallpaperTarget) -> Unit
@@ -23,7 +24,7 @@ fun FavoriteItemMenu(
     ) {
         //стандартная иконка "три вертикальные точки" MoreVert
         Icon(Icons.Default.MoreVert,
-            contentDescription = "Меню",
+            contentDescription = stringResource(R.string.menu_title),
             tint = Orange
         )
     }
@@ -38,32 +39,32 @@ fun FavoriteItemMenu(
         if (!showSubmenu) {
             // --- Первый уровень ---
             DropdownMenuItem(
-                text = { Text("Установить как обои") },
+                text = { Text(stringResource(R.string.menu_set_wallpaper)) },
                 onClick = { showSubmenu = true }
             )
         } else {
             // --- Подменю ---
             DropdownMenuItem(
-                text = { Text("← Назад") },
+                text = { Text(stringResource(R.string.menu_back)) },
                 onClick = { showSubmenu = false }
             )
             HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
             DropdownMenuItem(
-                text = { Text("На главный экран") },
+                text = { Text(stringResource(R.string.menu_wallpaper_home)) },
                 onClick = {
                     menuOpening = false; showSubmenu = false
                     onAction(WallpaperTarget.HOME)
                 }
             )
             DropdownMenuItem(
-                text = { Text("На экран блокировки") },
+                text = { Text(stringResource(R.string.menu_wallpaper_lock)) },
                 onClick = {
                     menuOpening = false; showSubmenu = false
                     onAction(WallpaperTarget.LOCK)
                 }
             )
             DropdownMenuItem(
-                text = { Text("На оба экрана") },
+                text = { Text(stringResource(R.string.menu_wallpaper_both)) },
                 onClick = {
                     menuOpening = false; showSubmenu = false
                     onAction(WallpaperTarget.BOTH)

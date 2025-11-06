@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Художественная фоторамка</string>
+
+    <!-- FavoriteItemMenu -->
+    <string name="menu_title">Меню</string>
+    <string name="menu_set_wallpaper">Установить как обои 😎</string>
+    <string name="menu_back">Назад</string>
+    <string name="menu_wallpaper_home">На главный экран 🖼️</string>
+    <string name="menu_wallpaper_lock">На экран блокировки 🖼️</string>
+    <string name="menu_wallpaper_both">На оба экрана 🖼️🖼️</string>
+
+    <!-- PictureScreen -->
+    <string name="picture_not_found">Картинка не найдена 😔</string>
+    <string name="full_image_cd">Полноэкранное изображение</string>
+    <string name="no_title">Нет заголовка 😕</string>
+    <string name="no_description">Нет описания 😕</string>
+
+    <!-- FavoriteScreen -->
+    <string name="no_favorite_pictures">Нет избранных картинок 😔</string>
+
+    <!-- WallpaperViewModel -->
+    <string name="wallpaper_success">Обои установлены 👍</string>
+    <string name="wallpaper_permission_denied">Нет прав на установку обоев 😡</string>
+    <string name="wallpaper_error">Не удалось установить обои 😒</string>
+
+</resources>

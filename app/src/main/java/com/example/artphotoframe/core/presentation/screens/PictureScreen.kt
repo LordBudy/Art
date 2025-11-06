@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -56,30 +57,45 @@ fun PictureScreen(
     // Сообщения от WallpaperViewModel
     val wallpaperUi = wallpaperVm.ui.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
 
     // Показываем сообщение
-    LaunchedEffect(wallpaperUi.message) {
-        val msg = wallpaperUi.message ?: return@LaunchedEffect
-        snackbarHostState.showSnackbar(msg)
-        wallpaperVm.clearMessage()
+    LaunchedEffect(wallpaperUi.result) {
+        val text = when (wallpaperUi.result) {
+            WallpaperResult.SUCCESS ->
+                context.getString(R.string.wallpaper_success)
+            WallpaperResult.PERMISSION_DENIED ->
+                context.getString(R.string.wallpaper_permission_denied)
+            WallpaperResult.ERROR ->
+                context.getString(R.string.wallpaper_error)
+            null -> null
+        }
+        if (text != null) {
+            snackbarHostState.showSnackbar(text)
+            wallpaperVm.clearMessage()
+        }
     }
 
     // Если картинка не найдена
     if (picture == null) {
-        Text("Картинка не найдена")
+        Text(stringResource(R.string.picture_not_found))
         return
     }
     // сперва пробуем загрузить HQ, если нет то  preview
     val hqUrl = picture.highQualityURL
     val previewUrl = picture.previewURL
-    var currentUrl by remember(picture) { mutableStateOf(hqUrl ?: previewUrl) } // стартуем с HQ, если есть
-    var triedFallback by remember(picture) { mutableStateOf(false) }            // чтобы не зациклиться
+
+    // стартуем с HQ, если есть
+    var currentUrl by remember(picture) { mutableStateOf(hqUrl ?: previewUrl) }
+
+    // чтобы не зациклиться
+    var triedFallback by remember(picture) { mutableStateOf(false) }
 
     // Показывать ли индикатор загрузки
     var isLoading by remember(currentUrl) { mutableStateOf(true) }
 
     // Настройка загрузки картинки
-    val context = LocalContext.current
     val imageRequest = remember(currentUrl) {
         ImageRequest.Builder(context)
             .data(currentUrl)
@@ -120,12 +136,12 @@ fun PictureScreen(
                     .padding(bottom = 12.dp)
             ) {
                 Text(
-                    text = picture.title ?: "Нет заголовка",
+                    text = picture.title ?: stringResource(R.string.no_title),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
                 Text(
-                    text = picture.description ?: "Нет описания",
+                    text = picture.description ?: stringResource(R.string.no_description),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
@@ -141,7 +157,7 @@ fun PictureScreen(
             // Полноэкранная картинка
             ZoomableAsyncImage(
                 model = imageRequest,
-                contentDescription = "Full screen image",
+                contentDescription = stringResource(R.string.full_image_cd),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.media),
                 error = painterResource(R.drawable.media),
@@ -152,7 +168,8 @@ fun PictureScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.05f)), // лёгкий полупрозрачный слой (по желанию)
+                        // полупрозрачный слой
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.05f)),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()

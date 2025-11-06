@@ -20,9 +20,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.artphotoframe.R
 import com.example.artphotoframe.core.presentation.ui.FavoriteItemMenu
 import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
 import com.example.artphotoframe.core.presentation.ui.HomeButton
@@ -49,7 +52,7 @@ fun FavoriteScreen(
 
     // Фильтруем дубликаты по ID если есть такие то удаляются
     val uniquePictures = pictures.distinctBy { it.id }
-
+    val context = LocalContext.current
     // Логируем для проверки
     //запускается каждый раз, когда uniquePictures меняется
     LaunchedEffect(uniquePictures) {
@@ -61,10 +64,20 @@ fun FavoriteScreen(
     }
 
     // Показ сообщения после установки обоев
-    LaunchedEffect(wallpaperUi.message) {
-        val msg = wallpaperUi.message ?: return@LaunchedEffect
-        snackbarHostState.showSnackbar(message = msg)
-        wallpaperViewModel.clearMessage()
+    LaunchedEffect(wallpaperUi.result) {
+        val text = when (wallpaperUi.result) {
+            WallpaperResult.SUCCESS ->
+                context.getString(R.string.wallpaper_success)
+            WallpaperResult.PERMISSION_DENIED ->
+                context.getString(R.string.wallpaper_permission_denied)
+            WallpaperResult.ERROR ->
+                context.getString(R.string.wallpaper_error)
+            null -> null
+        }
+        if (text != null) {
+            snackbarHostState.showSnackbar(text)
+            wallpaperViewModel.clearMessage()
+        }
     }
 
     // Основная колонка
@@ -79,7 +92,7 @@ fun FavoriteScreen(
         if (pictures.isEmpty()) {
             // Обработка пустого списка
             Text(
-                text = "Нет избранных картинок 😔",
+                text = stringResource(R.string.no_favorite_pictures),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )

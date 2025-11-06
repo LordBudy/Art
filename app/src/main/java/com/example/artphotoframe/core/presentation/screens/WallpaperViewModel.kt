@@ -20,20 +20,21 @@ class WallpaperViewModel (
             _ui.value = WallpaperUiState(isLoading = true)
             try {
                 setWallpaper(data, target)
-                _ui.value = WallpaperUiState(isLoading = false, message = "Обои установлены")
+                _ui.value = WallpaperUiState(result = WallpaperResult.SUCCESS)
             } catch (e: SecurityException) {
-                _ui.value = WallpaperUiState(isLoading = false, message = "Нет прав на установку обоев")
+                _ui.value = WallpaperUiState(result = WallpaperResult.PERMISSION_DENIED)
             } catch (e: Exception) {
-                _ui.value = WallpaperUiState(isLoading = false, message = "Не удалось установить обои")
+                _ui.value = WallpaperUiState(result = WallpaperResult.ERROR)
             }
         }
     }
 
     fun clearMessage() {
-        _ui.value = _ui.value.copy(message = null)
+        _ui.value = WallpaperUiState()
     }
 }
 data class WallpaperUiState(
     val isLoading: Boolean = false,
-    val message: String? = null
+    val result: WallpaperResult? = null
 )
+enum class WallpaperResult { SUCCESS, PERMISSION_DENIED, ERROR }
