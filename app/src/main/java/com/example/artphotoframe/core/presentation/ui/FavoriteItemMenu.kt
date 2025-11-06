@@ -6,7 +6,9 @@ import androidx.compose.material3.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.artphotoframe.core.domain.wallpaper.WallpaperTarget
+import com.example.artphotoframe.core.presentation.ui.theme.Orange
 
 @Composable
 fun FavoriteItemMenu(
@@ -17,16 +19,22 @@ fun FavoriteItemMenu(
     //Кнопка открытия меню
     IconButton(onClick = {
         menuOpening = true
-        showSubmenu = false }) {
+        showSubmenu = false
+    }
+    ) {
         //стандартная иконка "три вертикальные точки" MoreVert
-        Icon(Icons.Default.MoreVert, contentDescription = "Меню")
+        Icon(Icons.Default.MoreVert,
+            contentDescription = "Меню",
+            tint = Orange
+        )
     }
     // Выпадающее меню
     DropdownMenu(
         expanded = menuOpening,
         onDismissRequest = {
             menuOpening = false
-            showSubmenu = false}) {
+            showSubmenu = false
+        }) {
 
         if (!showSubmenu) {
             // --- Первый уровень ---

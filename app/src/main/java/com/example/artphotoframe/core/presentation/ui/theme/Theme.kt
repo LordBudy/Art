@@ -12,9 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = Purple80,     //главный цвет акцентов
+    secondary = PurpleGrey80,   //вспомогательный
+    tertiary = Pink80,  //третий акцент
     background = Color(0xFF303030),
     surface = Color(0xFF424242),
     onPrimary = Color.White,

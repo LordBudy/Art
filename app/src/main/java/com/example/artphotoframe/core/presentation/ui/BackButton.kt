@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.artphotoframe.core.presentation.ui.theme.Orange
 
 @Composable
 fun BackButton(
@@ -22,7 +23,7 @@ fun BackButton(
         Icon(
             imageVector = Icons.Filled.ArrowBackIosNew,  // стрелка назад
             contentDescription = "назад",
-            tint = color
+            tint = Orange
         )
     }
 }
