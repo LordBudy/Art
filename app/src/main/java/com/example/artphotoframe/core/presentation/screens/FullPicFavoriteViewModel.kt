@@ -64,9 +64,6 @@ class FullPicFavoriteViewModel(
         }
     }
 
-    fun isFavoriteSync(picture: Picture): Boolean =
-        favorites.value.any { it.id == picture.id }
-
     val onAddToFavorites: (Picture) -> Unit = { picture ->
         viewModelScope.launch {
             addToFavoritesUseCase.invoke(picture)

@@ -37,8 +37,7 @@ class SearchPictureFullRepositoryImpl(
                 .filter { it.primaryImageSmall?.isNotBlank() == true && it.primaryImage?.isNotBlank() == true }
                 .map { Picture.Companion.fromMetObject(it) }
         } catch (e: HttpException) {
-            // это твой кейс 403 Forbidden (или любой 4xx / 5xx)
-            // можно залогировать e.code(), но наружу не падаем
+            // кейс 403 Forbidden (или любой 4xx / 5xx)
             emptyList()
         } catch (e: IOException) {
             // сетевые ошибки, нет интернета, таймаут и т.д.

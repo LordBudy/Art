@@ -16,7 +16,7 @@ data class Picture(
     companion object {
         fun fromMetObject(metObject: MetObject): Picture {
             return Picture(
-                id = metObject.objectID,  // Предполагая, что id - Int
+                id = metObject.objectID,  //  id - Int
                 title = metObject.title ?: "Unknown Title",
                 previewURL = metObject.primaryImageSmall ?: "",  // Маленькое изображение (превью)
                 highQualityURL = metObject.primaryImage ?: "",  // Высококачественное изображение

@@ -7,45 +7,35 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.artphotoframe.R
-import com.example.artphotoframe.core.domain.wallpaper.WallpaperTarget
 import com.example.artphotoframe.core.presentation.ui.BackButton
 import com.example.artphotoframe.core.presentation.ui.BtnFavorite
 import com.example.artphotoframe.core.presentation.ui.FavoriteItemMenu
-import com.example.artphotoframe.core.presentation.ui.FullPictureInfo
+import com.example.artphotoframe.core.presentation.ui.ZoomableAsyncImage
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,30 +63,38 @@ fun PictureScreen(
         wallpaperVm.clearMessage()
     }
 
-    // Если картинка не нашлась — коротко выходим
+    // Если картинка не нашлась — выходим
     if (picture == null) {
         Text("Картинка не найдена")
         return
     }
-    // --- Fallback: сначала пытаемся HQ, если упало — переключаемся на preview ---
+    // сперва пробуем загрузить HQ, если нет то  preview
     val hqUrl = picture.highQualityURL
     val previewUrl = picture.previewURL
     var currentUrl by remember(picture) { mutableStateOf(hqUrl ?: previewUrl) } // стартуем с HQ, если есть
     var triedFallback by remember(picture) { mutableStateOf(false) }            // чтобы не зациклиться
 
-    val context = LocalContext.current
+// ✅ Флаг загрузки для визуализации
+    var isLoading by remember(currentUrl) { mutableStateOf(true) }
+
     // Собираем ImageRequest вручную, чтобы перехватить onError и переключиться на preview
+    val context = LocalContext.current
     val imageRequest = remember(currentUrl) {
         ImageRequest.Builder(context)
             .data(currentUrl)
             .crossfade(true)
             .allowHardware(false) // безопасно для получения Bitmap при необходимости
             .listener(
+                onStart = { isLoading = true },         // старт загрузки
+                onSuccess = { _, _ -> isLoading = false }, // успешно загрузили → прячем индикатор
                 onError = { _, _ ->
                     // если не пробовали фолбэк и есть preview — переключаемся на него
                     if (!triedFallback && hqUrl != null && previewUrl != null && currentUrl == hqUrl) {
                         triedFallback = true
                         currentUrl = previewUrl
+                    } else {
+                        // если фолбэка нет или он тоже упал — завершаем загрузку и покажем error-плейсхолдер
+                        isLoading = false
                     }
                 }
             )
@@ -139,8 +137,8 @@ fun PictureScreen(
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // Полноэкранная картинка с фолбэком HQ → preview
-            AsyncImage(
+            // 📸 Полноэкранная картинка (с zoom/pan/double-tap внутри)
+            ZoomableAsyncImage(
                 model = imageRequest,
                 contentDescription = "Full screen image",
                 contentScale = ContentScale.Crop,
@@ -148,6 +146,17 @@ fun PictureScreen(
                 error = painterResource(R.drawable.media),
                 modifier = Modifier.fillMaxSize()
             )
+            // 🔵 Индикатор загрузки поверх картинки, пока Coil грузит
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.05f)), // лёгкий полупрозрачный слой (по желанию)
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
 
             // ← Назад + ❤ Избранное (левый верх)
             Row(
