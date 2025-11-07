@@ -32,6 +32,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.request.ImageRequest
 import com.example.artphotoframe.R
+import com.example.artphotoframe.core.presentation.screens.viewmodel.FullPicFavoriteViewModel
+import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperResult
+import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperViewModel
 import com.example.artphotoframe.core.presentation.ui.BackButton
 import com.example.artphotoframe.core.presentation.ui.BtnFavorite
 import com.example.artphotoframe.core.presentation.ui.FavoriteItemMenu

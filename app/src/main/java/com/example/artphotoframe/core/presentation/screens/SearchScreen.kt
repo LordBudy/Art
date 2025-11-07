@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.artphotoframe.core.presentation.screens.viewmodel.SearchViewModel
 import com.example.artphotoframe.core.presentation.ui.FastSearch
 import org.koin.androidx.compose.koinViewModel
 

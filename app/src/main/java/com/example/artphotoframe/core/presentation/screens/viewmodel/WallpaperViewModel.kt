@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.presentation.screens
+package com.example.artphotoframe.core.presentation.screens.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
