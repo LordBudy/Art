@@ -30,63 +30,56 @@ fun FullPictureInfo(
     onUpdateFavorites: (Picture) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.background)
+        //автоматически добавляет(padding) под системные панели
 
-
-    Scaffold(
-        modifier = modifier,
-        content = { innerPadding ->
-            Column(
+    ) {
+        Row {
+            BackButton(
+                onClick = { navController.popBackStack() },
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            // Заголовок
+            Text(
+                text = picture.title ?: "Нет заголовка",
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
-                    //автоматически добавляет(padding) под системные панели
-                    .padding(innerPadding)
-            ) {
-                Row {
-                    BackButton(
-                        onClick = { navController.popBackStack() },
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    // Заголовок
-                    Text(
-                        text = picture.title ?: "Нет заголовка",
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .padding(15.dp)
-                    )
-                }
-
-                // Изображение
-                FullPictureFavorite(
-                    picture = picture,
-                    onClick = {
-                        navController.navigate("picture_screen/${picture.id}")
-                    },
-                    isFavorite = isFavorite,
-                    onAddToFavorites = onAddToFavorites,
-                    onRemoveFromFavorites = onRemoveFromFavorites,
-                    onUpdateFavorites = onUpdateFavorites,
-                    menu = {}
-                )
-
-
-                // Описание
-                Text(
-                    // Обработка null
-                    text = picture.description ?: "Нет описания",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp)
-                        .wrapContentHeight(unbounded = true)
-
-                )
-            }
+                    .padding(15.dp)
+            )
         }
-    )
 
+        // Изображение
+        FullPictureFavorite(
+            picture = picture,
+            onImageClick = null,
+            isFavorite = isFavorite,
+            onAddToFavorites = onAddToFavorites,
+            onRemoveFromFavorites = onRemoveFromFavorites,
+            onUpdateFavorites = onUpdateFavorites,
+            menu = {}
+        )
+
+
+        // Описание
+        Text(
+            // Обработка null
+            text = picture.description ?: "Нет описания",
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+                .wrapContentHeight(unbounded = true)
+
+        )
+    }
 }
+
+
+
 
 //@PreviewLightDark
 //@Composable

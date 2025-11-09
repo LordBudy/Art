@@ -1,23 +1,21 @@
 package com.example.artphotoframe.core.presentation.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.artphotoframe.core.presentation.ui.FullPictureInfo
+import com.example.artphotoframe.R
+import com.example.artphotoframe.core.presentation.screens.viewmodel.FullPicFavoriteViewModel
+import com.example.artphotoframe.core.Result
+import com.example.artphotoframe.core.presentation.screens.viewmodel.Wallpaper
+import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperViewModel
+import com.example.artphotoframe.core.presentation.ui.PictureContent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -25,43 +23,54 @@ fun PictureScreen(
     pictureId: Int,
     navController: NavController
 ) {
+    // Получаем VM через Koin
     val viewModel: FullPicFavoriteViewModel = koinViewModel()
+    val wallpaperVm: WallpaperViewModel = koinViewModel()
 
     // Загружаем картинку при создании экрана
-    LaunchedEffect(pictureId) {
-        viewModel.loadPictureById(pictureId)
-    }
-    // Собираем состояние текущей картинки
-    val picture by viewModel.currentPicture.collectAsState()
-    val isFavorite by viewModel.isFavorite.collectAsState()
+    LaunchedEffect(pictureId) { viewModel.loadPictureById(pictureId) }
 
-    // remember для кэширования состояния
-    val cachedPicture by remember(picture) {
-        mutableStateOf(picture) }
+    // Текущее изображение и флаг-статус избранного
+    val picture = viewModel.currentPicture.collectAsStateWithLifecycle().value
+    val isFavorite = viewModel.isFavorite.collectAsStateWithLifecycle().value
 
-    if (cachedPicture != null) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.background)
-            ) {
-                FullPictureInfo(
-                    picture = cachedPicture!!,//можно безопасно использовать !!
-                    navController = navController,
-                    isFavorite = isFavorite,
-                    onAddToFavorites = viewModel.onAddToFavorites,
-                    onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
-                    onUpdateFavorites = viewModel.onUpdateFavorites
-                )
+    // Сообщения от WallpaperViewModel
+    val wallpaperUi = wallpaperVm.ui.collectAsStateWithLifecycle().value
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    // Показываем сообщение результат установки обоев
+    LaunchedEffect(wallpaperUi) {
+        val text = when ( wallpaperUi) {
+            is Result.Success -> context.getString(R.string.wallpaper_success)
+            is Result.Error -> when (wallpaperUi.error) {
+                Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
+                Wallpaper.Generic -> context.getString(R.string.wallpaper_error)
+                else -> null
             }
-
-    } else {
-        // если картинка не найдена
-        Text("Картинка не найдена !",
-            color = Color.Red,
-            fontSize = 32.sp ,
-            modifier = Modifier
-                .padding(start = 70.dp, top = 70.dp))
-
+            is Result.Loading -> null
+            else -> null
+        }
+        if (text != null) {
+            snackbarHostState.showSnackbar(text)
+            wallpaperVm.clearMessage()
+        }
     }
+
+    // Если картинка не найдена
+    if (picture == null) {
+        Text(stringResource(R.string.picture_not_found))
+        return
+    }
+
+    PictureContent(
+        picture = picture,
+        isFavorite = isFavorite,
+        onBack = { navController.popBackStack() },
+        onAddFavorite = viewModel.onAddToFavorites,
+        onRemoveFavorite = viewModel.onRemoveFromFavorites,
+        onUpdateFavorite = viewModel.onUpdateFavorites,
+        onApplyWallpaper = { url, target -> wallpaperVm.apply(url, target) },
+        snackbarHostState = snackbarHostState
+    )
 }

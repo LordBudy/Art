@@ -1,3 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Art Photo Frame</string>
+    <string name="app_name" translatable="false">Art Photo Frame</string>
+
+    <!-- FavoriteItemMenu -->
+    <string name="menu_title">Menu</string>
+    <string name="menu_set_wallpaper">Set as wallpaper 😎</string>
+    <string name="menu_back">Back</string>
+    <string name="menu_wallpaper_home">Home screen 🖼️</string>
+    <string name="menu_wallpaper_lock">Lock screen 🖼️</string>
+    <string name="menu_wallpaper_both">Both screens 🖼️🖼️</string>
+
+    <!-- PictureScreen -->
+    <string name="picture_not_found">Picture not found 😔</string>
+    <string name="full_image_cd">Full screen image</string>
+    <string name="no_title">No title 😕</string>
+    <string name="no_description">No description 😕</string>
+
+    <!-- FavoriteScreen -->
+    <string name="no_favorite_pictures">No favorite pictures 😔</string>
+
+    <!-- WallpaperViewModel -->
+    <string name="wallpaper_success">Wallpaper applied 👍</string>
+    <string name="wallpaper_permission_denied">Permission denied 😡</string>
+    <string name="wallpaper_error">Failed to apply wallpaper 😒</string>
+
+
 </resources>

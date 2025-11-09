@@ -1,4 +1,4 @@
-package com.example.artphotoframe.core.presentation.screens
+package com.example.artphotoframe.core.presentation.screens.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,7 +9,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(

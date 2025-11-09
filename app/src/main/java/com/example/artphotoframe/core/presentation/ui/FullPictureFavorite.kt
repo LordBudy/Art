@@ -27,7 +27,7 @@ import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
 @Composable
 fun FullPictureFavorite(
     picture: Picture,
-    onClick: () -> Unit,
+    onImageClick: (() -> Unit)? = null,
     isFavorite: Boolean,
     onAddToFavorites: (Picture) -> Unit,
     onRemoveFromFavorites: (Picture) -> Unit,
@@ -36,6 +36,11 @@ fun FullPictureFavorite(
 ) {
     Box {
         val imageUrl = picture.previewURL
+        val clickModifier = if (onImageClick != null) {
+            Modifier.clickable { onImageClick() }   // клик только если передали обработчик
+        } else {
+            Modifier
+        }
         if (imageUrl != null) {
             // Если URL есть, используем AsyncImage для загрузки из сети
             AsyncImage(
@@ -46,7 +51,7 @@ fun FullPictureFavorite(
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable { onClick() },
+                    .then(clickModifier),
                 placeholder = painterResource(id = R.drawable.media),
                 error = painterResource(id = R.drawable.media)
             )
@@ -91,7 +96,7 @@ fun FullPictureFavorite(
 
 @PreviewLightDark
 @Composable
-fun FullPictureFavorite() {
+fun FullPictureFavoritePreview() {
     val pic = Picture(
         id = 1,
         title = "Die Malkunst",
@@ -107,7 +112,7 @@ fun FullPictureFavorite() {
         ) {
             FullPictureFavorite(
                 picture = pic,
-                onClick = {},
+                onImageClick = {},
                 isFavorite = false,
                 onAddToFavorites = {},
                 onRemoveFromFavorites = {},

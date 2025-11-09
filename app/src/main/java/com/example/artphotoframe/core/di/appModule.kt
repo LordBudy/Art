@@ -22,9 +22,9 @@ import com.example.artphotoframe.core.domain.search.SearchPicturesUseCase
 import com.example.artphotoframe.core.domain.search.SearchRepository
 import com.example.artphotoframe.core.domain.wallpaper.SetWallpaperUseCase
 import com.example.artphotoframe.core.domain.wallpaper.WallpaperRepository
-import com.example.artphotoframe.core.presentation.screens.FullPicFavoriteViewModel
-import com.example.artphotoframe.core.presentation.screens.SearchViewModel
-import com.example.artphotoframe.core.presentation.screens.WallpaperViewModel
+import com.example.artphotoframe.core.presentation.screens.viewmodel.FullPicFavoriteViewModel
+import com.example.artphotoframe.core.presentation.screens.viewmodel.SearchViewModel
+import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperViewModel
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext

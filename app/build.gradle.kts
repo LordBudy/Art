@@ -53,6 +53,7 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.compose.ui.text)
     ksp(libs.androidx.room.compiler)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
@@ -81,5 +82,4 @@ dependencies {
     implementation(libs.multidex)
     implementation(libs.lifecycle.viewmodel.compose)
 
-    // implementation(libs.androidx.compose.material.icons.extended)
 }

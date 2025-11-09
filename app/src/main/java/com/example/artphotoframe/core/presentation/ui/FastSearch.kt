@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -21,6 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.artphotoframe.core.presentation.ui.theme.ArtPhotoFrameTheme
@@ -32,6 +36,7 @@ fun FastSearch(
     onSearchClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -48,13 +53,20 @@ fun FastSearch(
                 onValueChange(newText)},
             maxLines = 1,
             placeholder = { Text(text = "Введите название") },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search), // ← кнопка «Поиск»
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearchClick(text)         // ← запускаем поиск
+                    keyboardController?.hide()  // ← прячем клавиатуру (по желанию)
+                }
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(horizontal = 8.dp)
         )
         IconButton(
-            onClick = { onSearchClick.invoke(text) }
+            onClick = { onSearchClick(text) }
         ) {
             Icon(
                 imageVector = Icons.Default.Search,

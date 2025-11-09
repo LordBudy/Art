@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -24,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.artphotoframe.core.presentation.screens.viewmodel.SearchViewModel
 import com.example.artphotoframe.core.presentation.ui.FastSearch
-import com.example.artphotoframe.core.presentation.ui.FavoritesButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -54,59 +53,55 @@ fun SearchScreen(
     // Состояние для текста поиска
     var searchText by remember { mutableStateOf("") }
 
-        Scaffold(
-            content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        //автоматически добавляет(padding) под системные панели
-                        .padding(innerPadding)
-                ) {
 
-                    // Панель поиска
-                    FastSearch(
-                        text = searchText,
-                        onValueChange = { newText ->
-                            searchText = newText
-                        },
-                        onSearchClick = { query ->
-                            if (query.isBlank()) {
-                                Log.d("LaunchedEffect", "вызываем loadAllPictures")
-                                viewModel.loadAllPictures()
-                            } else {
-                                Log.d("LaunchedEffect", "вызываем searchPictures")
-                                viewModel.searchPictures(query)
-                            }
-                        },
-                        modifier =
-                            Modifier.padding(bottom = 8.dp)
-                    )
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.background)
+        //автоматически добавляет(padding) под системные панели
 
-                    // Отображение результатов поиска
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        items(
-                            pictures,
-                            key = { picture -> picture.id }
-                        ) { picture ->
-                            FullPicture(
-                                picture = picture,
-                                onClick = {
-                                    navController
-                                        .navigate("picture_screen/${picture.id}")
-                                }
-                            )
-                            HorizontalDivider() // Разделитель между изображениями
-                        }
-                    }
+    ) {
+        // Панель поиска
+        FastSearch(
+            text = searchText,
+            onValueChange = { newText ->
+                searchText = newText
+            },
+            onSearchClick = { query ->
+                if (query.isBlank()) {
+                    Log.d("LaunchedEffect", "вызываем loadAllPictures")
+                    viewModel.loadAllPictures()
+                } else {
+                    Log.d("LaunchedEffect", "вызываем searchPictures")
+                    viewModel.searchPictures(query)
                 }
-            }
+            },
+            modifier =
+                Modifier.padding(bottom = 8.dp)
         )
 
+        // Отображение результатов поиска
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(
+                pictures,
+                key = { picture -> picture.id }
+            ) { picture ->
+                FullPicture(
+                    picture = picture,
+                    onClick = {
+                        navController
+                            .navigate("picture_screen/${picture.id}")
+                    }
+                )
+                HorizontalDivider() // Разделитель между изображениями
+            }
+        }
+    }
 }
+
 
 //@PreviewLightDark
 //@Composable
