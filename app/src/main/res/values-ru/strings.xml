@@ -22,7 +22,7 @@
 
     <!-- WallpaperViewModel -->
     <string name="wallpaper_success">Обои установлены 👍</string>
-    <string name="wallpaper_permission_denied">Нет прав на установку обоев 😡</string>
-    <string name="wallpaper_error">Не удалось установить обои 😒</string>
+    <string name="wallpaper_permission_denied">Нет разрешения 😡</string>
+    <string name="wallpaper_error">Ошибка установки 😒</string>
 
 </resources>

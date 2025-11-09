@@ -20,9 +20,9 @@
     <string name="no_favorite_pictures">No favorite pictures 😔</string>
 
     <!-- WallpaperViewModel -->
-    <string name="wallpaper_success">Wallpaper set 👍</string>
-    <string name="wallpaper_permission_denied">No permission to set wallpaper 😡</string>
-    <string name="wallpaper_error">Failed to set wallpaper 😒</string>
+    <string name="wallpaper_success">Wallpaper applied 👍</string>
+    <string name="wallpaper_permission_denied">Permission denied 😡</string>
+    <string name="wallpaper_error">Failed to apply wallpaper 😒</string>
 
 
 </resources>

@@ -23,7 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.artphotoframe.R
 import com.example.artphotoframe.core.presentation.screens.viewmodel.FullPicFavoriteViewModel
-import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperResult
+import com.example.artphotoframe.core.Result
+import com.example.artphotoframe.core.presentation.screens.viewmodel.Wallpaper
 import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperViewModel
 import com.example.artphotoframe.core.presentation.ui.FavoriteItemMenu
 import com.example.artphotoframe.core.presentation.ui.FullPictureFavorite
@@ -62,15 +63,17 @@ fun FavoriteScreen(
     }
 
     // Показ сообщения после установки обоев
-    LaunchedEffect(wallpaperUi.result) {
-        val text = when (wallpaperUi.result) {
-            WallpaperResult.SUCCESS ->
-                context.getString(R.string.wallpaper_success)
-            WallpaperResult.PERMISSION_DENIED ->
-                context.getString(R.string.wallpaper_permission_denied)
-            WallpaperResult.ERROR ->
-                context.getString(R.string.wallpaper_error)
-            null -> null
+    LaunchedEffect(wallpaperUi) {
+        val state = wallpaperUi //state — обычная локальная переменная (не делегат)
+        val text = when (state) {
+            is Result.Success -> context.getString(R.string.wallpaper_success)
+            is Result.Error -> when (state.error) {
+                Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
+                Wallpaper.Generic -> context.getString(R.string.wallpaper_error)
+                else -> null
+            }
+            is Result.Loading -> null
+            else -> null
         }
         if (text != null) {
             snackbarHostState.showSnackbar(text)
