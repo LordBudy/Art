@@ -12,7 +12,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.artphotoframe.R
 import com.example.artphotoframe.core.presentation.screens.viewmodel.FullPicFavoriteViewModel
-import com.example.artphotoframe.core.Result
 import com.example.artphotoframe.core.presentation.screens.viewmodel.Wallpaper
 import com.example.artphotoframe.core.presentation.screens.viewmodel.WallpaperViewModel
 import com.example.artphotoframe.core.presentation.ui.PictureContent
@@ -41,15 +40,12 @@ fun PictureScreen(
 
     // Показываем сообщение результат установки обоев
     LaunchedEffect(wallpaperUi) {
-        val text = when ( wallpaperUi) {
-            is Result.Success -> context.getString(R.string.wallpaper_success)
-            is Result.Error -> when (wallpaperUi.error) {
-                Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
-                Wallpaper.Generic -> context.getString(R.string.wallpaper_error)
-                else -> null
-            }
-            is Result.Loading -> null
-            else -> null
+        val text = when (wallpaperUi) {
+            is Wallpaper.Success -> context.getString(R.string.wallpaper_success)
+            is Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
+            is Wallpaper.GenericError -> context.getString(R.string.wallpaper_error)
+            is Wallpaper.Loading -> null
+
         }
         if (text != null) {
             snackbarHostState.showSnackbar(text)

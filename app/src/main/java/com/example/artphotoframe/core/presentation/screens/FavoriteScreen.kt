@@ -64,16 +64,13 @@ fun FavoriteScreen(
 
     // Показ сообщения после установки обоев
     LaunchedEffect(wallpaperUi) {
-        val state = wallpaperUi //state — обычная локальная переменная (не делегат)
+        val state = wallpaperUi // локальная переменная (не делегат)
         val text = when (state) {
-            is Result.Success -> context.getString(R.string.wallpaper_success)
-            is Result.Error -> when (state.error) {
-                Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
-                Wallpaper.Generic -> context.getString(R.string.wallpaper_error)
-                else -> null
-            }
-            is Result.Loading -> null
-            else -> null
+            is Wallpaper.Success -> context.getString(R.string.wallpaper_success)
+            is Wallpaper.PermissionDenied -> context.getString(R.string.wallpaper_permission_denied)
+            is Wallpaper.GenericError -> context.getString(R.string.wallpaper_error)
+            is Wallpaper.Loading -> null
+
         }
         if (text != null) {
             snackbarHostState.showSnackbar(text)
@@ -113,7 +110,7 @@ fun FavoriteScreen(
                         onImageClick = {
                             // Переход на полный просмотр
                             navController.navigate("picture_screen/${picture.id}")
-                                       },
+                        },
                         isFavorite = true,
                         onAddToFavorites = {},
                         onRemoveFromFavorites = viewModel.onRemoveFromFavorites,
@@ -129,7 +126,9 @@ fun FavoriteScreen(
                                 if (dataForWallpaper.isNotBlank()) {
                                     wallpaperViewModel.apply(dataForWallpaper, target)
                                 } else {
-                                    Log.w("FavoriteScreen", "Нет ссылки на изображение для ID=${picture.id}"
+                                    Log.w(
+                                        "FavoriteScreen",
+                                        "Нет ссылки на изображение для ID=${picture.id}"
                                     )
                                 }
                             }
