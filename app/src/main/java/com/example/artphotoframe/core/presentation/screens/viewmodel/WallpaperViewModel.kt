@@ -7,35 +7,35 @@ import com.example.artphotoframe.core.domain.wallpaper.WallpaperTarget
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.example.artphotoframe.core.Result
+
 
 class WallpaperViewModel (
     private val setWallpaper: SetWallpaperUseCase
 ) : ViewModel() {
 
-    private val _ui = MutableStateFlow<Result<Wallpaper>>(Result.Loading)
+    private val _ui = MutableStateFlow<Wallpaper>(Wallpaper.Loading)
     val ui = _ui.asStateFlow()
 
     fun apply(data: Any, target: WallpaperTarget) {
         viewModelScope.launch {
-            _ui.value = Result.Loading
             try {
                 setWallpaper(data, target)
-                _ui.value = Result.Success(Wallpaper.Success)
+                _ui.value = Wallpaper.Success
             } catch (e: SecurityException) {
-                _ui.value = Result.Error(Wallpaper.PermissionDenied)
+                _ui.value =Wallpaper.PermissionDenied
             } catch (e: Exception) {
-                _ui.value = Result.Error(Wallpaper.Generic)
+                _ui.value = Wallpaper.GenericError(e)
             }
         }
     }
 
     fun clearMessage() {
-        _ui.value = Result.Loading
+        _ui.value = Wallpaper.Loading
     }
 }
 sealed class Wallpaper {
+    object Loading: Wallpaper()
     object Success : Wallpaper()
     object PermissionDenied : Wallpaper()
-    object Generic : Wallpaper()
+    data class GenericError(val exception: Exception) : Wallpaper()
 }
