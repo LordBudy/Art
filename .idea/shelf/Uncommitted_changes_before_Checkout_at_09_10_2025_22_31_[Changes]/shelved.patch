@@ -1,0 +1,23 @@
+Index: ../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/SearchPictureFullRepositoryImpl.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.artphotoframe.core.data\r\n\r\nimport com.example.artphotoframe.core.data.models.EuropeanaSearchResponse\r\nimport com.example.artphotoframe.core.data.models.Picture\r\nimport com.example.artphotoframe.core.domain.search.SearchRepository\r\n\r\n//Получаем данные от API и преобразуем их в удобный формат\r\nclass SearchPictureFullRepositoryImpl(private val apiService: ApiService): SearchRepository {\r\n    override suspend fun getSearchPictures(query: String): List<Picture> {\r\n        val response: EuropeanaSearchResponse = apiService.searchPictures(query)\r\n        return response.items?.map {\r\n            Picture.fromEuropeanaItem(it) } ?: emptyList()\r\n    }\r\n}
+===================================================================
+diff --git a/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/SearchPictureFullRepositoryImpl.kt b/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/SearchPictureFullRepositoryImpl.kt
+--- a/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/SearchPictureFullRepositoryImpl.kt	(revision 0781f432f559874c1f550da229e6e3ed4f33e1a2)
++++ b/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/SearchPictureFullRepositoryImpl.kt	(date 1760025636004)
+@@ -1,5 +1,6 @@
+ package com.example.artphotoframe.core.data
+ 
++import android.util.Log
+ import com.example.artphotoframe.core.data.models.EuropeanaSearchResponse
+ import com.example.artphotoframe.core.data.models.Picture
+ import com.example.artphotoframe.core.domain.search.SearchRepository
+@@ -8,6 +9,7 @@
+ class SearchPictureFullRepositoryImpl(private val apiService: ApiService): SearchRepository {
+     override suspend fun getSearchPictures(query: String): List<Picture> {
+         val response: EuropeanaSearchResponse = apiService.searchPictures(query)
++        Log.d("SearchPictureFullRepositoryImpl", "ответ $response")
+         return response.items?.map {
+             Picture.fromEuropeanaItem(it) } ?: emptyList()
+     }

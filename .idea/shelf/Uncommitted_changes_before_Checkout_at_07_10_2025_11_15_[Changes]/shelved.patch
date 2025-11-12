@@ -1,0 +1,15 @@
+Index: ../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/models/Pictute.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.artphotoframe.core.data.models\r\n\r\nimport java.net.URL\r\n\r\ndata class Picture(\r\n    val id: Int,\r\n    val title: String,\r\n    val imageURL: String,\r\n    val body: String\r\n)\r\n
+===================================================================
+diff --git a/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/models/Pictute.kt b/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/models/Pictute.kt
+--- a/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/models/Pictute.kt	(revision 9368382f0d876649a361b7c845b3b3fdc3789dc1)
++++ b/../ArtPhotoFrame/app/src/main/java/com/example/artphotoframe/core/data/models/Pictute.kt	(date 1759822500858)
+@@ -1,6 +1,5 @@
+ package com.example.artphotoframe.core.data.models
+ 
+-import java.net.URL
+ 
+ data class Picture(
+     val id: Int,
